@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeGuard 산업안전컨설팅</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --navy: #0d1f3c;
+    --navy2: #162d54;
+    --blue: #1a56a0;
+    --accent: #e8a020;
+    --light: #f4f7fb;
+    --gray: #6b7a90;
+    --white: #ffffff;
+  }
+  body { font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif; color: #222; background: var(--white); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px; height: 64px; z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+  .logo { color: var(--white); font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: #cdd6e8; text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  section { scroll-margin-top: 64px; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, #1a3a6e 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 20px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-badge {
+    display: inline-block; background: rgba(232,160,32,0.15); border: 1px solid var(--accent);
+    color: var(--accent); padding: 6px 18px; border-radius: 20px; font-size: 0.82rem;
+    font-weight: 600; letter-spacing: 2px; margin-bottom: 28px;
+  }
+  .hero h1 { color: var(--white); font-size: 3.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 20px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: #a8bcd8; font-size: 1.1rem; line-height: 1.8; margin-bottom: 40px; }
+  .btn-primary {
+    background: var(--accent); color: var(--navy); padding: 14px 36px;
+    border: none; border-radius: 4px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #f0b030; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,160,32,0.4); }
+  .btn-outline {
+    background: transparent; color: var(--white); padding: 14px 36px;
+    border: 1.5px solid rgba(255,255,255,0.4); border-radius: 4px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; margin-left: 14px;
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+  .stats {
+    display: flex; justify-content: center; gap: 60px; margin-top: 70px;
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num { color: var(--accent); font-size: 2.2rem; font-weight: 800; }
+  .stat-label { color: #7a9abf; font-size: 0.85rem; margin-top: 4px; }
+
+  /* ABOUT */
+  #about { background: var(--white); padding: 100px 60px; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-tag { color: var(--blue); font-size: 0.82rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-size: 2.2rem; font-weight: 800; color: var(--navy); margin-bottom: 16px; }
+  .section-desc { color: var(--gray); font-size: 1rem; line-height: 1.8; max-width: 560px; margin: 0 auto; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1100px; margin: 0 auto; align-items: center; }
+  .about-text p { color: #444; line-height: 1.9; margin-bottom: 20px; font-size: 0.97rem; }
+  .about-features { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
+  .feature-item { display: flex; align-items: flex-start; gap: 14px; }
+  .feature-icon { width: 40px; height: 40px; background: var(--light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .feature-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .feature-item p { font-size: 0.85rem; color: var(--gray); }
+
+  .timeline { position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: var(--light); }
+  .tl-item { display: flex; gap: 24px; margin-bottom: 28px; position: relative; }
+  .tl-dot { width: 42px; height: 42px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.75rem; font-weight: 700; flex-shrink: 0; z-index: 1; }
+  .tl-content h4 { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+  .tl-content p { font-size: 0.83rem; color: var(--gray); margin-top: 3px; }
+
+  /* SERVICES */
+  #services { background: var(--light); padding: 100px 60px; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
+  .service-card {
+    background: var(--white); border-radius: 12px; padding: 36px 28px;
+    box-shadow: 0 2px 16px rgba(13,31,60,0.07); transition: all 0.25s;
+    border-top: 3px solid transparent;
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(13,31,60,0.13); border-top-color: var(--accent); }
+  .svc-icon { font-size: 2.4rem; margin-bottom: 18px; }
+  .service-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+  .service-card p { font-size: 0.88rem; color: var(--gray); line-height: 1.75; }
+  .svc-tag { display: inline-block; margin-top: 16px; font-size: 0.75rem; color: var(--blue); font-weight: 600; }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--white); padding: 100px 60px; }
+  .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
+  .portfolio-card {
+    background: var(--light); border-radius: 10px; padding: 24px 20px;
+    text-align: center; transition: all 0.2s;
+  }
+  .portfolio-card:hover { background: var(--navy); }
+  .portfolio-card:hover .pc-name { color: var(--white); }
+  .portfolio-card:hover .pc-type { color: var(--accent); }
+  .pc-logo { width: 52px; height: 52px; background: var(--white); border-radius: 10px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+  .pc-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+  .pc-type { font-size: 0.78rem; color: var(--gray); margin-top: 4px; }
+
+  /* CONTACT */
+  #contact { background: var(--navy); padding: 100px 60px; }
+  #contact .section-title { color: var(--white); }
+  #contact .section-desc { color: #7a9abf; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1000px; margin: 0 auto; }
+  .contact-info { color: #a8bcd8; }
+  .contact-info h3 { color: var(--white); font-size: 1.3rem; margin-bottom: 24px; }
+  .ci-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
+  .ci-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.07); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .ci-item h4 { color: var(--white); font-size: 0.88rem; margin-bottom: 4px; }
+  .ci-item p { font-size: 0.85rem; color: #7a9abf; }
+  .contact-form { display: flex; flex-direction: column; gap: 14px; }
+  .contact-form input, .contact-form textarea, .contact-form select {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px; padding: 13px 16px; color: var(--white); font-size: 0.9rem;
+    outline: none; transition: border 0.2s; width: 100%;
+  }
+  .contact-form input::placeholder, .contact-form textarea::placeholder { color: #5a7299; }
+  .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
+  .contact-form textarea { height: 120px; resize: vertical; }
+  .contact-form .btn-primary { width: 100%; text-align: center; margin-left: 0; }
+
+  /* FOOTER */
+  footer {
+    background: #081428; color: #5a7299; text-align: center;
+    padding: 28px; font-size: 0.83rem; border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer span { color: var(--accent); }
+
+  /* SCROLL ACTIVE */
+  .nav-links a.active { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="logo">Safe<span>Guard</span> 안전컨설팅</div>
+  <ul class="nav-links">
+    <li><a href="#hero">홈</a></li>
+    <li><a href="#about">회사소개</a></li>
+    <li><a href="#services">서비스</a></li>
+    <li><a href="#portfolio">실적</a></li>
+    <li><a href="#contact">문의</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🛡️ CERTIFIED SAFETY CONSULTANT</div>
+    <h1>안전한 현장,<br><span>신뢰할 수 있는 파트너</span></h1>
+    <p>산업 현장의 위험을 분석하고 체계적인 안전관리 시스템을 구축합니다.<br>위험성평가부터 안전 컨설팅까지, 전문가가 함께합니다.</p>
+    <a href="#contact" class="btn-primary">무료 상담 신청</a>
+    <a href="#services" class="btn-outline">서비스 보기</a>
+    <div class="stats">
+      <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">컨설팅 수행 실적</div></div>
+      <div class="stat-item"><div class="stat-num">15년</div><div class="stat-label">업계 전문 경험</div></div>
+      <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">고객 만족도</div></div>
+      <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">협력 기업</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <div class="section-tag">About Us</div>
+    <h2 class="section-title">전문성과 신뢰로 함께하는<br>산업안전 파트너</h2>
+    <p class="section-desc">산업현장의 안전을 최우선으로 생각하며, 체계적인 위험성 평가와 안전관리 솔루션을 제공합니다.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>SafeGuard 안전컨설팅은 산업안전보건법에 기반한 체계적인 안전관리 시스템 구축을 지원합니다. 제조업, 건설업, 서비스업 등 다양한 업종에서 축적된 전문 경험을 바탕으로 현장 맞춤형 솔루션을 제공합니다.</p>
+      <p>공인 산업안전지도사 및 안전관리전문기관으로서 법정 의무 사항 이행부터 자율 안전문화 정착까지 전 과정을 지원합니다.</p>
+      <div class="about-features">
+        <div class="feature-item">
+          <div class="feature-icon">🎓</div>
+          <div><h4>공인 전문 자격 보유</h4><p>산업안전지도사, 안전관리전문기관 지정</p></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div><h4>법정 요건 완벽 충족</h4><p>산업안전보건법 기반 컴플라이언스 지원</p></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🤝</div>
+          <div><h4>현장 밀착형 서비스</h4><p>업종 특성에 맞는 맞춤형 안전관리 시스템</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot">2009</div><div class="tl-content"><h4>회사 설립</h4><p>산업안전컨설팅 전문기업으로 출발</p></div></div>
+      <div class="tl-item"><div class="tl-dot">2013</div><div class="tl-content"><h4>안전관리전문기관 지정</h4><p>고용노동부 공인 안전관리전문기관 등록</p></div></div>
+      <div class="tl-item"><div class="tl-dot">2017</div><div class="tl-content"><h4>위험성평가 인정기관 선정</h4><p>산업안전보건공단 위험성평가 인정기관 선정</p></div></div>
+      <div class="tl-item"><div class="tl-dot">2020</div><div class="tl-content"><h4>중대재해처벌법 대응팀 신설</h4><p>법 시행 대비 전담 컨설팅팀 운영 시작</p></div></div>
+      <div class="tl-item"><div class="tl-dot">2024</div><div class="tl-content"><h4>누적 500개사 돌파</h4><p>컨설팅 수행 기업 500개사 달성</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header">
+    <div class="section-tag">Services</div>
+    <h2 class="section-title">주요 서비스</h2>
+    <p class="section-desc">산업 현장의 안전을 위한 전문적이고 체계적인 서비스를 제공합니다.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="svc-icon">⚠️</div>
+      <h3>위험성평가</h3>
+      <p>사업장 내 유해·위험요인을 체계적으로 파악하고 위험성을 추정·결정하여 감소대책을 수립합니다.</p>
+      <span class="svc-tag">▶ 산업안전보건법 제36조 기반</span>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">🏗️</div>
+      <h3>안전관리 대행</h3>
+      <p>50인 미만 사업장을 대상으로 안전관리자 역할을 수행하는 안전관리 위탁 서비스를 제공합니다.</p>
+      <span class="svc-tag">▶ 안전관리전문기관 지정</span>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">⚖️</div>
+      <h3>중대재해처벌법 대응</h3>
+      <p>중대재해처벌법 의무 이행을 위한 안전보건관리체계 구축 및 이행점검을 지원합니다.</p>
+      <span class="svc-tag">▶ 경영자 의무 이행 지원</span>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">📚</div>
+      <h3>법정 안전교육</h3>
+      <p>근로자 정기교육, 관리감독자 교육, 특별교육 등 법정 의무 안전보건교육을 대행합니다.</p>
+      <span class="svc-tag">▶ 산업안전보건교육 전문</span>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">🔍</div>
+      <h3>안전진단 & 감사</h3>
+      <p>현장 안전수준을 객관적으로 평가하고 개선 우선순위를 도출하는 안전보건 진단 서비스입니다.</p>
+      <span class="svc-tag">▶ Gap 분석 및 개선 로드맵</span>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">📄</div>
+      <h3>안전보건 문서 작성</h3>
+      <p>안전보건관리규정, 작업표준서(SOP), 비상대응계획 등 법정 문서 작성 및 관리를 지원합니다.</p>
+      <span class="svc-tag">▶ 맞춤형 문서 시스템 구축</span>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header">
+    <div class="section-tag">Portfolio</div>
+    <h2 class="section-title">주요 수행 실적</h2>
+    <p class="section-desc">다양한 업종의 기업들과 안전한 현장을 만들어왔습니다.</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-card"><div class="pc-logo">🏭</div><div class="pc-name">A 제조㈜</div><div class="pc-type">위험성평가 / 안전관리 대행</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🏗️</div><div class="pc-name">B 건설㈜</div><div class="pc-type">중대재해처벌법 컨설팅</div></div>
+    <div class="portfolio-card"><div class="pc-logo">⚡</div><div class="pc-name">C 전기㈜</div><div class="pc-type">안전진단 / 교육</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🚚</div><div class="pc-name">D 물류㈜</div><div class="pc-name">안전보건체계 구축</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🔧</div><div class="pc-name">E 기계㈜</div><div class="pc-type">위험성평가 / 문서 작성</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🏥</div><div class="pc-name">F 의료재단</div><div class="pc-type">법정 안전교육 대행</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🍽️</div><div class="pc-name">G 식품㈜</div><div class="pc-type">안전관리 대행</div></div>
+    <div class="portfolio-card"><div class="pc-logo">🏢</div><div class="pc-name">H 서비스㈜</div><div class="pc-type">중대재해처벌법 대응</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-tag" style="color:#e8a020">Contact</div>
+    <h2 class="section-title">문의하기</h2>
+    <p class="section-desc">안전에 관한 모든 문의를 환영합니다. 전문가가 신속하게 답변드립니다.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>연락처 정보</h3>
+      <div class="ci-item">
+        <div class="ci-icon">📍</div>
+        <div><h4>주소</h4><p>강원특별자치도 강릉시 000로 00<br>SafeGuard 빌딩 3층</p></div>
+      </div>
+      <div class="ci-item">
+        <div class="ci-icon">📞</div>
+        <div><h4>전화</h4><p>033-000-0000</p></div>
+      </div>
+      <div class="ci-item">
+        <div class="ci-icon">✉️</div>
+        <div><h4>이메일</h4><p>info@safeguard.co.kr</p></div>
+      </div>
+      <div class="ci-item">
+        <div class="ci-icon">🕐</div>
+        <div><h4>운영시간</h4><p>평일 09:00 ~ 18:00<br>토·일·공휴일 휴무</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form">
+        <input type="text" placeholder="회사명 / 성함">
+        <input type="tel" placeholder="연락처">
+        <input type="email" placeholder="이메일">
+        <select style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:13px 16px;color:#7a9abf;font-size:0.9rem;outline:none;width:100%">
+          <option>문의 유형 선택</option>
+          <option>위험성평가</option>
+          <option>안전관리 대행</option>
+          <option>중대재해처벌법 대응</option>
+          <option>법정 안전교육</option>
+          <option>기타 문의</option>
+        </select>
+        <textarea placeholder="문의 내용을 입력해 주세요."></textarea>
+        <a href="#" class="btn-primary" style="text-align:center">문의 보내기</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 <span>SafeGuard 안전컨설팅</span> | 사업자등록번호: 000-00-00000 | 대표: 홍길동 | 안전관리전문기관 지정</p>
+</footer>
+
+<script>
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+  // Nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (scrollY >= s.offsetTop - 80) cur = s.id; });
+    links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + cur); });
+  });
+</script>
+</body>
+</html>
