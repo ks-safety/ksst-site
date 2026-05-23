@@ -1,13 +1,13 @@
 {
   "name": "(KS)안전기술",
-  "nameEn": "Korea Standard Safety Tech.",
-  "biz": "000-00-00000",
+  "addrShort": "강원특별자치도 원주시",
   "ceo": "홍길동",
-  "tel": "033-000-0000",
-  "fax": "033-000-0000",
-  "email": "info@ks-safety.co.kr",
-  "addr": "강원특별자치도 강릉시 000로 00, ○○빌딩 3층",
-  "addrShort": "강원 강릉시 000로 00",
   "hours": "평일 09:00 ~ 18:00",
-  "kakaoMap": "https://map.kakao.com"
+  "addr": "강원특별자치도 강릉시 000로 00, ○○빌딩 3층",
+  "biz": "000-00-00000",
+  "nameEn": "Korea Standard Safety Tech.",
+  "kakaoMap": "https://map.kakao.com",
+  "tel": "033-1111-1111",
+  "email": "info@ks-safety.co.kr",
+  "fax": "033-000-0000"
 }
