@@ -19,7 +19,7 @@ let SITE = {
   logo:     '../KS_안전기술_로고.png',  // 서브폴더에서 상대경로
   logoRoot: './KS_안전기술_로고.png',   // 루트에서 상대경로
   hours:    '평일 09:00 ~ 18:00',
-  kakaoMap: 'https://map.kakao.com', // ✏️ 실제 카카오맵 URL로 교체
+  kakaoMap: 'https://place.map.kakao.com/2144024193', // ✏️ 실제 카카오맵 URL로 교체
   year:     new Date().getFullYear(),
 };
 
