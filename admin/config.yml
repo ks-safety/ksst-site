@@ -2,7 +2,10 @@ backend:
   name: git-gateway
   branch: main
 media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
 collections:
+  # ── 공지사항 (여러 글) ──
   - name: "board"
     label: "공지사항"
     folder: "_posts"
@@ -13,3 +16,23 @@ collections:
       - { label: "날짜", name: "date", widget: "datetime" }
       - { label: "분류", name: "category", widget: "select", options: ["공지", "안내", "법령", "뉴스"] }
       - { label: "내용", name: "body", widget: "text" }
+
+  # ── 회사 기본정보 (단일 파일 편집) ──
+  - name: "settings"
+    label: "사이트 설정"
+    files:
+      - name: "company"
+        label: "회사 기본정보"
+        file: "site.json"
+        fields:
+          - { label: "회사명 (국문)", name: "name", widget: "string" }
+          - { label: "회사명 (영문)", name: "nameEn", widget: "string" }
+          - { label: "사업자등록번호", name: "biz", widget: "string" }
+          - { label: "대표자명", name: "ceo", widget: "string" }
+          - { label: "대표 전화", name: "tel", widget: "string" }
+          - { label: "팩스", name: "fax", widget: "string" }
+          - { label: "이메일", name: "email", widget: "string" }
+          - { label: "주소 (전체)", name: "addr", widget: "string" }
+          - { label: "주소 (짧게)", name: "addrShort", widget: "string" }
+          - { label: "운영 시간", name: "hours", widget: "string" }
+          - { label: "카카오맵 URL", name: "kakaoMap", widget: "string", required: false }
