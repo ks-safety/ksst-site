@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="(KS)안전기술 수행실적 - 다양한 업종 산업안전 컨설팅 실적">
+  <title>수행실적 | (KS)안전기술</title>
+  <link rel="icon" type="image/png" href="./KS_안전기술_로고.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
+  <style>
+    /* 실적 통계 배너 */
+    .stat-bar {
+      background: var(--navy);
+      padding: 52px 0;
+      border-bottom: 3px solid var(--red);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .st-item {
+      text-align: center;
+      padding: 0 20px;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+    .st-item:last-child { border-right: none; }
+    .st-num {
+      font-size: 48px; font-weight: 900; color: var(--white);
+      line-height: 1; display: flex; align-items: baseline;
+      justify-content: center; gap: 3px;
+    }
+    .st-num sup { font-size: 20px; color: var(--red); font-weight: 700; }
+    .st-label { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 8px; }
+
+    /* 필터 탭 */
+    .filter-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+    .f-tab {
+      padding: 8px 20px; border-radius: 100px;
+      font-size: 13px; font-weight: 700;
+      border: 1.5px solid var(--border); color: var(--mid-gray);
+      cursor: pointer; transition: var(--tr);
+    }
+    .f-tab.on, .f-tab:hover {
+      background: var(--red); color: var(--white);
+      border-color: var(--red);
+    }
+
+    /* 실적 카드 그리드 */
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .port-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 26px 22px;
+      transition: var(--tr);
+      cursor: default;
+    }
+    .port-card:hover {
+      border-color: var(--red);
+      box-shadow: var(--sh-lg);
+      transform: translateY(-4px);
+    }
+    .p-logo {
+      width: 52px; height: 52px;
+      background: var(--off-white);
+      border-radius: var(--r);
+      display: flex; align-items: center;
+      justify-content: center; font-size: 22px;
+      margin-bottom: 14px;
+    }
+    .p-industry {
+      font-size: 10px; font-weight: 700;
+      color: var(--red); letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+    .p-name {
+      font-size: 15px; font-weight: 700;
+      color: var(--navy); margin-bottom: 6px;
+    }
+    .p-service {
+      font-size: 12px; color: var(--mid-gray);
+      line-height: 1.65;
+    }
+    .p-tags {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      margin-top: 12px;
+    }
+    .p-tag {
+      font-size: 10px; font-weight: 700;
+      color: var(--navy); background: var(--light);
+      padding: 2px 10px; border-radius: 100px;
+    }
+
+    /* 주요 실적 하이라이트 */
+    .highlight-sec { background: var(--off-white); }
+    .hl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    .hl-card {
+      background: var(--white);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      transition: var(--tr);
+    }
+    .hl-card:hover { box-shadow: var(--sh-lg); transform: translateY(-4px); }
+    .hl-img {
+      width: 100%; height: 200px;
+      object-fit: cover; object-position: center;
+    }
+    .hl-body { padding: 24px 22px; }
+    .hl-body .p-industry { margin-bottom: 8px; }
+    .hl-body h3 {
+      font-size: 17px; font-weight: 700;
+      color: var(--navy); margin-bottom: 8px;
+    }
+    .hl-body p {
+      font-size: 13px; color: var(--mid-gray);
+      line-height: 1.75;
+    }
+
+    /* CTA */
+    .port-cta {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      padding: 72px 0; text-align: center;
+    }
+    .port-cta h2 {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 900; color: var(--white); margin-bottom: 12px;
+    }
+    .port-cta p {
+      font-size: 15px; color: rgba(255,255,255,.5);
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 1024px) {
+      .port-grid { grid-template-columns: repeat(3, 1fr); }
+      .hl-grid   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .port-grid { grid-template-columns: 1fr 1fr; }
+      .hl-grid   { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .port-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-hero">
+  <div class="wrap">
+    <span class="label">PORTFOLIO</span>
+    <h1>수행 실적</h1>
+    <p>다양한 업종의 기업들과 함께 안전한 현장을 만들어왔습니다</p>
+    <div class="breadcrumb">
+      <a href="index.html">홈</a><span class="sep">›</span><span class="cur">수행실적</span>
+    </div>
+  </div>
+</div>
+
+<!-- 실적 통계 -->
+<div class="stat-bar">
+  <div class="wrap">
+    <div class="stat-grid">
+      <!-- ✏️ data-n 숫자를 실제 실적으로 수정하세요 -->
+      <div class="st-item fu">
+        <div class="st-num"><span class="cnt" data-n="500">0</span><sup>+건</sup></div>
+        <div class="st-label">누적 컨설팅</div>
+      </div>
+      <div class="st-item fu fu-d1">
+        <div class="st-num"><span class="cnt" data-n="200">0</span><sup>+개</sup></div>
+        <div class="st-label">누적 고객사</div>
+      </div>
+      <div class="st-item fu fu-d2">
+        <div class="st-num"><span class="cnt" data-n="12">0</span><sup>개</sup></div>
+        <div class="st-label">취급 업종</div>
+      </div>
+      <div class="st-item fu fu-d3">
+        <div class="st-num"><span class="cnt" data-n="16">0</span><sup>년</sup></div>
+        <div class="st-label">전문 업력</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 주요 실적 하이라이트 -->
+<section class="sec highlight-sec">
+  <div class="wrap">
+    <div class="sec-head fu">
+      <span class="label">HIGHLIGHTS</span>
+      <h2 class="h2">주요 수행 사례</h2>
+      <p class="lead">대표적인 컨설팅 사례를 소개합니다</p>
+    </div>
+    <!-- ✏️ 실제 주요 실적 사례로 수정하세요 -->
+    <div class="hl-grid">
+      <div class="hl-card fu">
+        <img class="hl-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="제조업 안전 컨설팅">
+        <div class="hl-body">
+          <div class="p-industry">제조업 · 위험성평가</div>
+          <h3>A 제조㈜ 전사 안전관리체계 구축</h3>
+          <p>500인 규모 제조 사업장 대상 전사 위험성평가 및 중대재해처벌법 대응 안전보건관리체계 구축 프로젝트</p>
+          <div class="p-tags">
+            <span class="p-tag">위험성평가</span>
+            <span class="p-tag">중대재해대응</span>
+            <span class="p-tag">문서화</span>
+          </div>
+        </div>
+      </div>
+      <div class="hl-card fu fu-d1">
+        <img class="hl-img" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=700&q=80" alt="건설업 안전 컨설팅">
+        <div class="hl-body">
+          <div class="p-industry">건설업 · 안전관리 대행</div>
+          <h3>B 건설㈜ 현장 안전관리 대행</h3>
+          <p>연 매출 300억 건설사 대상 3년간 안전관리 대행 서비스 제공. 무재해 현장 달성 및 고용부 감독 무사통과</p>
+          <div class="p-tags">
+            <span class="p-tag">안전관리대행</span>
+            <span class="p-tag">무재해</span>
+            <span class="p-tag">법령대응</span>
+          </div>
+        </div>
+      </div>
+      <div class="hl-card fu fu-d2">
+        <img class="hl-img" src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=700&q=80" alt="안전교육">
+        <div class="hl-body">
+          <div class="p-industry">서비스업 · 안전교육</div>
+          <h3>F 의료재단 법정 안전교육 대행</h3>
+          <p>400명 규모 의료재단 전직원 법정 안전보건교육 연간 대행. 업종 특성에 맞춘 맞춤형 교육 커리큘럼 개발·운영</p>
+          <div class="p-tags">
+            <span class="p-tag">법정교육</span>
+            <span class="p-tag">맞춤커리큘럼</span>
+            <span class="p-tag">의료업</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 전체 실적 목록 -->
+<section class="sec" style="background: var(--white);">
+  <div class="wrap">
+    <div class="sec-head fu">
+      <span class="label">ALL CLIENTS</span>
+      <h2 class="h2">전체 고객사 현황</h2>
+      <p class="lead">2009년 설립 이후 함께해 온 소중한 고객사입니다</p>
+    </div>
+
+    <!-- 필터 -->
+    <div class="filter-tabs fu" id="filterTabs">
+      <button class="f-tab on" onclick="filterPort('all', this)">전체</button>
+      <button class="f-tab" onclick="filterPort('mfg', this)">제조업</button>
+      <button class="f-tab" onclick="filterPort('const', this)">건설업</button>
+      <button class="f-tab" onclick="filterPort('service', this)">서비스업</button>
+      <button class="f-tab" onclick="filterPort('chem', this)">화학·전기</button>
+      <button class="f-tab" onclick="filterPort('food', this)">식품·유통</button>
+    </div>
+
+    <!-- ✏️ 실제 고객사 정보로 수정하세요 -->
+    <div class="port-grid" id="portGrid">
+      <!-- JS로 렌더링 -->
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="port-cta">
+  <div class="wrap">
+    <h2>귀사도 (KS)안전기술과 함께하세요</h2>
+    <p>500개사 이상의 신뢰가 증명하는 전문 안전관리 서비스</p>
+    <a href="inquiry.html" class="btn btn-red" style="font-size:15px; padding:15px 36px;">무료 상담 신청하기 →</a>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="./assets/common.js"></script>
+<script>
+/* ✏️ 실제 고객사 데이터로 수정하세요 */
+const CLIENTS = [
+  { cat:'mfg',     icon:'🏭', name:'A 제조㈜',    service:'위험성평가 / 안전관리 대행',       tags:['위험성평가','대행'] },
+  { cat:'const',   icon:'🏗️', name:'B 건설㈜',    service:'중대재해처벌법 컨설팅',            tags:['중대재해','컨설팅'] },
+  { cat:'chem',    icon:'⚡', name:'C 전기㈜',    service:'안전진단 / 법정 교육',             tags:['진단','교육'] },
+  { cat:'food',    icon:'🚚', name:'D 물류㈜',    service:'안전보건체계 구축',                tags:['체계구축'] },
+  { cat:'mfg',     icon:'🔧', name:'E 기계㈜',    service:'위험성평가 / 문서 작성',           tags:['위험성평가','문서'] },
+  { cat:'service', icon:'🏥', name:'F 의료재단',  service:'법정 안전교육 대행',               tags:['교육'] },
+  { cat:'food',    icon:'🍽️', name:'G 식품㈜',    service:'안전관리 대행',                    tags:['대행'] },
+  { cat:'service', icon:'🏢', name:'H 서비스㈜',  service:'중대재해처벌법 대응',              tags:['중대재해'] },
+  { cat:'chem',    icon:'🧪', name:'I 화학㈜',    service:'위험성평가 / 화학물질 관리',       tags:['위험성평가','화학'] },
+  { cat:'mfg',     icon:'🔩', name:'J 철강㈜',    service:'안전관리 대행 / 교육',             tags:['대행','교육'] },
+  { cat:'const',   icon:'🏛️', name:'K 토건㈜',    service:'건설업 안전관리 대행',             tags:['대행','건설'] },
+  { cat:'service', icon:'🎓', name:'L 학교법인',  service:'법정 안전교육 / 위험성평가',       tags:['교육','위험성평가'] },
+  { cat:'mfg',     icon:'🚗', name:'M 자동차부품㈜','service':'안전보건관리체계 구축',        tags:['체계구축','중대재해'] },
+  { cat:'food',    icon:'🛒', name:'N 유통㈜',    service:'안전관리 대행',                    tags:['대행'] },
+  { cat:'chem',    icon:'💡', name:'O 에너지㈜',  service:'중대재해 컨설팅 / 진단',           tags:['중대재해','진단'] },
+  { cat:'mfg',     icon:'🖨️', name:'P 전자㈜',    service:'위험성평가 / 문서 작성',           tags:['위험성평가','문서'] },
+];
+
+let currentCat = 'all';
+
+function filterPort(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.f-tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderPort();
+}
+
+function renderPort() {
+  const filtered = currentCat === 'all'
+    ? CLIENTS
+    : CLIENTS.filter(c => c.cat === currentCat);
+
+  document.getElementById('portGrid').innerHTML = filtered.map((c, i) => `
+    <div class="port-card fu ${i % 4 >= 1 ? 'fu-d' + Math.min(i % 4, 4) : ''}">
+      <div class="p-logo">${c.icon}</div>
+      <div class="p-industry">${catLabel(c.cat)}</div>
+      <div class="p-name">${c.name}</div>
+      <div class="p-service">${c.service}</div>
+      <div class="p-tags">${c.tags.map(t => `<span class="p-tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  /* 페이드업 재적용 */
+  setTimeout(() => {
+    document.querySelectorAll('.port-card.fu').forEach(el => {
+      void el.offsetWidth;
+      el.classList.add('show');
+    });
+  }, 50);
+}
+
+function catLabel(cat) {
+  const m = { mfg:'제조업', const:'건설업', service:'서비스업', chem:'화학·전기', food:'식품·유통' };
+  return m[cat] || '기타';
+}
+
+renderPort();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="(KS)안전기술 공지사항 게시판">
+  <title>공지사항 | (KS)안전기술</title>
+  <link rel="icon" type="image/png" href="./KS_안전기술_로고.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
+  <style>
+    .board-wrap{display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start}
+    /* 사이드 카테고리 */
+    .board-side{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;position:sticky;top:120px}
+    .bs-head{background:var(--navy);color:#fff;padding:18px 20px;font-size:14px;font-weight:700}
+    .bs-item{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;font-size:13px;color:var(--dark-gray);border-bottom:1px solid var(--border);cursor:pointer;transition:var(--tr)}
+    .bs-item:last-child{border-bottom:none}
+    .bs-item:hover,.bs-item.on{background:var(--red-light);color:var(--red);font-weight:700;padding-left:26px}
+    .bs-item .bs-cnt{font-size:11px;background:var(--light);color:var(--mid-gray);padding:2px 8px;border-radius:100px}
+    .bs-item.on .bs-cnt{background:var(--red);color:#fff}
+    /* 검색 */
+    .board-search{display:flex;gap:0;margin-bottom:24px}
+    .board-search select{padding:10px 14px;border:1.5px solid var(--border);border-right:none;border-radius:var(--r) 0 0 var(--r);font-size:13px;color:var(--dark-gray);background:var(--off-white);min-width:110px}
+    .board-search input{flex:1;padding:10px 14px;border:1.5px solid var(--border);font-size:13px;background:var(--off-white)}
+    .board-search button{padding:10px 20px;background:var(--navy);color:#fff;border-radius:0 var(--r) var(--r) 0;font-size:13px;font-weight:700;transition:var(--tr)}
+    .board-search button:hover{background:var(--red)}
+    /* 게시판 헤더 바 */
+    .board-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .board-bar .total{font-size:13px;color:var(--mid-gray)}
+    .board-bar .total b{color:var(--red)}
+    /* 상세 보기 오버레이 */
+    .post-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:flex-start;justify-content:center;padding:80px 20px 40px;overflow-y:auto}
+    .post-overlay.open{display:flex}
+    .post-box{background:#fff;border-radius:var(--r-lg);max-width:760px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .post-head{padding:32px 36px 24px;border-bottom:1px solid var(--border)}
+    .post-cat{font-size:11px;font-weight:800;color:#fff;padding:2px 10px;border-radius:4px;background:var(--red);margin-bottom:12px;display:inline-block}
+    .post-title{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:10px;line-height:1.3}
+    .post-meta{display:flex;gap:16px;font-size:12px;color:var(--mid-gray)}
+    .post-body{padding:32px 36px;min-height:200px;font-size:14px;color:var(--dark-gray);line-height:1.9}
+    .post-foot{padding:18px 36px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+    @media(max-width:768px){.board-wrap{grid-template-columns:1fr}.board-side{position:static}.post-head,.post-body,.post-foot{padding:20px}}
+  </style>
+</head>
+<body>
+<div class="page-hero">
+  <div class="wrap">
+    <span class="label">BOARD</span>
+    <h1>공지사항</h1>
+    <p>안전 관련 공지사항, 법령 정보, 안전 뉴스를 확인하세요</p>
+    <div class="breadcrumb"><a href="index.html">홈</a><span class="sep">›</span><span class="cur">공지사항</span></div>
+  </div>
+</div>
+
+<section class="sec"><div class="wrap">
+  <div class="board-wrap">
+    <!-- 사이드 카테고리 -->
+    <div class="board-side fu">
+      <div class="bs-head">📋 게시판 분류</div>
+      <div class="bs-item on" onclick="filterCat('all',this)">전체 <span class="bs-cnt">15</span></div>
+      <div class="bs-item" onclick="filterCat('notice',this)">공지사항 <span class="bs-cnt">5</span></div>
+      <div class="bs-item" onclick="filterCat('law',this)">안전 법령 정보 <span class="bs-cnt">6</span></div>
+      <div class="bs-item" onclick="filterCat('news',this)">안전 뉴스 <span class="bs-cnt">4</span></div>
+    </div>
+    <!-- 게시판 본문 -->
+    <div class="fu fu-d1">
+      <div class="board-search">
+        <select><option>제목</option><option>내용</option><option>제목+내용</option></select>
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요" onkeyup="searchBoard()">
+        <button onclick="searchBoard()">검색</button>
+      </div>
+      <div class="board-bar"><span class="total">전체 <b id="totalCnt">15</b>건</span></div>
+      <!-- ✏️ 게시글 목록을 실제 내용으로 수정하세요 -->
+      <table class="board-table" id="boardTable">
+        <thead><tr>
+          <th style="width:60px">번호</th>
+          <th style="width:80px">분류</th>
+          <th>제목</th>
+          <th style="width:110px">작성일</th>
+          <th style="width:60px">조회</th>
+        </tr></thead>
+        <tbody id="boardBody">
+          <!-- 데이터는 JS로 렌더링 -->
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 게시글 상세 오버레이 -->
+<div class="post-overlay" id="postOverlay" onclick="closePost(event)">
+  <div class="post-box" onclick="event.stopPropagation()">
+    <div class="post-head">
+      <div class="post-cat" id="postCat"></div>
+      <div class="post-title" id="postTitle"></div>
+      <div class="post-meta">
+        <span>📅 <span id="postDate"></span></span>
+        <span>👁 조회 <span id="postViews"></span></span>
+      </div>
+    </div>
+    <div class="post-body" id="postBody"></div>
+    <div class="post-foot">
+      <button class="btn btn-navy" onclick="closePost()">목록으로</button>
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="./assets/common.js"></script>
+<script>
+/* ✏️ 게시글 데이터 — 실제 내용으로 수정하세요 */
+const POSTS = [
+  {id:15,cat:'notice',catLabel:'공지',date:'2025.06.01',views:128,title:'2025년 하반기 안전교육 일정 공지',body:'2025년 하반기 안전교육 일정을 안내드립니다.\n\n■ 교육 일정\n- 근로자 정기 교육: 매월 셋째 주 화요일\n- 관리감독자 교육: 분기별 일정 별도 안내\n- 특별 교육: 수시 진행\n\n자세한 문의는 전화(033-000-0000) 또는 온라인 문의를 이용해 주세요.'},
+  {id:14,cat:'notice',catLabel:'안내',date:'2025.05.20',views:95,title:'중대재해처벌법 개정 사항 안내',body:'중대재해처벌법 시행 이후 주요 개정 사항을 안내드립니다.\n\n2024년 1월 27일부터 상시근로자 5인 미만 사업장에도 전면 적용됩니다. 해당 사업장에서는 즉시 안전보건관리체계를 점검하시기 바랍니다.\n\n전문 컨설팅이 필요하신 경우 문의해 주세요.'},
+  {id:13,cat:'notice',catLabel:'공지',date:'2025.04.15',views:74,title:'위험성평가 인정 제도 변경 사항',body:'한국산업안전보건공단의 위험성평가 인정 제도 변경 사항을 공지합니다.\n\n주요 변경 내용:\n- 위험성평가 방법 다양화 (체크리스트형, OPS, KRAS 등)\n- 위험성 결정 기준 완화\n- 근로자 참여 확대 의무화\n\n자세한 내용은 문의해 주세요.'},
+  {id:12,cat:'notice',catLabel:'안내',date:'2025.03.10',views:210,title:'홈페이지 리뉴얼 오픈 안내',body:'(KS)안전기술 홈페이지가 새롭게 단장하였습니다.\n\n더욱 편리하고 유용한 정보를 제공하기 위해 홈페이지를 전면 리뉴얼하였습니다. 사업분야, 공지사항, 온라인 문의 등 다양한 기능을 이용해 보세요.\n\n이용 중 불편한 점이 있으시면 문의해 주세요.'},
+  {id:11,cat:'notice',catLabel:'공지',date:'2025.02.28',views:87,title:'2025년 안전관리 전문기관 재지정 완료',body:'(KS)안전기술이 2025년 안전관리 전문기관으로 재지정되었음을 알려드립니다.\n\n앞으로도 최고의 안전관리 서비스로 보답하겠습니다.\n고객 여러분의 지속적인 신뢰와 성원에 감사드립니다.'},
+  {id:10,cat:'law',catLabel:'법령',date:'2025.05.30',views:156,title:'산업안전보건법 시행규칙 개정 (2025)',body:'2025년 산업안전보건법 시행규칙 개정 주요 내용입니다.\n\n■ 주요 개정 사항\n- 안전보건교육 시간 조정\n- 위험성평가 제출 의무화 확대\n- 건설업 안전관리비 사용 기준 변경\n\n자세한 내용은 고용노동부 공식 사이트를 참조하시거나 저희에게 문의해 주세요.'},
+  {id:9,cat:'law',catLabel:'뉴스',date:'2025.05.10',views:98,title:'고용노동부 2025년 산재예방 중점 추진 과제',body:'고용노동부가 발표한 2025년 산재예방 중점 추진 과제를 안내드립니다.\n\n■ 5대 중점 과제\n1. 중대재해 감소 로드맵 이행\n2. 위험성평가 내실화\n3. 안전보건 의식 문화 확산\n4. 취약계층 보호 강화\n5. 산재보험 제도 개선'},
+  {id:8,cat:'law',catLabel:'법령',date:'2025.04.22',views:112,title:'화학물질관리법 개정 주요 내용',body:'화학물질관리법 개정 주요 내용을 안내드립니다.\n\n화학물질 취급 사업장은 반드시 개정 내용을 확인하시고 안전보건 조치를 강화해 주시기 바랍니다.\n\n도움이 필요하신 경우 (KS)안전기술에 문의해 주세요.'},
+  {id:7,cat:'law',catLabel:'뉴스',date:'2025.04.05',views:76,title:'건설업 안전관리비 사용 기준 변경',body:'건설업 안전관리비 사용 기준이 변경되었습니다.\n\n주요 변경 사항:\n- 안전관리비 계상 기준 상향\n- 사용 가능 항목 확대\n- 사용 내역 보고 의무화\n\n건설 현장 담당자는 변경 사항을 반드시 확인해 주세요.'},
+  {id:6,cat:'law',catLabel:'법령',date:'2025.03.18',views:134,title:'근로자 안전보건교육 시간 기준 변경',body:'산업안전보건법 시행규칙 개정에 따른 안전보건교육 시간 기준 변경 사항입니다.\n\n■ 변경된 교육 시간\n- 근로자 정기 교육: 분기 6시간 (기존 동일)\n- 관리감독자 정기 교육: 연간 16시간\n- 신규 채용자 교육: 8시간'},
+  {id:5,cat:'law',catLabel:'법령',date:'2025.02.20',views:89,title:'산업안전보건위원회 구성 기준 변경',body:'산업안전보건위원회 구성 및 운영에 관한 기준이 변경되었습니다.\n\n상시근로자 100인 이상 사업장은 변경된 기준에 따라 위원회를 구성·운영하여야 합니다.'},
+  {id:4,cat:'news',catLabel:'뉴스',date:'2025.05.15',views:203,title:'2025년 1분기 산업재해 발생 현황',body:'고용노동부가 발표한 2025년 1분기 산업재해 발생 현황입니다.\n\n전년 동기 대비 사망사고 10% 감소, 부상사고 5% 감소하였습니다.\n지속적인 안전관리와 예방 활동의 성과입니다.'},
+  {id:3,cat:'news',catLabel:'뉴스',date:'2025.04.28',views:145,title:'스마트 안전장비 도입 지원 사업 안내',body:'중소기업 스마트 안전장비 도입 지원 사업을 안내드립니다.\n\n■ 지원 내용\n- 스마트 안전장비 구입비 50% 지원\n- 최대 지원액: 1억원\n- 신청 기간: 2025년 6월 30일까지\n\n자세한 내용은 안전보건공단 공식 사이트를 참조하세요.'},
+  {id:2,cat:'news',catLabel:'뉴스',date:'2025.03.22',views:118,title:'AI 기반 안전관리 시스템 확산',body:'AI 기술을 활용한 스마트 안전관리 시스템이 산업 현장에 빠르게 도입되고 있습니다.\n\n영상 분석 기반 위험 감지, AI 안전 점검 챗봇 등 다양한 기술이 현장에 적용되고 있습니다.'},
+  {id:1,cat:'news',catLabel:'뉴스',date:'2025.02.10',views:87,title:'2025년 안전보건 공모전 개최 안내',body:'한국산업안전보건공단에서 주관하는 2025년 안전보건 공모전이 개최됩니다.\n\n■ 공모 분야\n- 안전보건 아이디어 부문\n- 사진·영상 부문\n- 포스터 부문\n\n접수 기간: 2025년 4월 1일 ~ 5월 31일'},
+];
+
+let currentCat = 'all';
+let currentPage = 1;
+const PER_PAGE = 10;
+
+function renderBoard() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = POSTS.filter(p =>
+    (currentCat === 'all' || p.cat === currentCat) &&
+    p.title.toLowerCase().includes(keyword)
+  );
+  document.getElementById('totalCnt').textContent = filtered.length;
+  const start = (currentPage - 1) * PER_PAGE;
+  const page  = filtered.slice(start, start + PER_PAGE);
+  const tbody = document.getElementById('boardBody');
+  tbody.innerHTML = page.map((p,i) => `
+    <tr onclick="openPost(${p.id})">
+      <td style="text-align:center;color:var(--mid-gray)">${filtered.length - start - i}</td>
+      <td><span class="b-cat ${p.cat==='notice'?'red':''}">${p.catLabel}</span></td>
+      <td class="b-tit" style="max-width:unset">${p.title}</td>
+      <td style="color:var(--mid-gray)">${p.date}</td>
+      <td style="text-align:center;color:var(--mid-gray)">${p.views}</td>
+    </tr>
+  `).join('');
+  // 페이지네이션
+  const total = Math.ceil(filtered.length / PER_PAGE);
+  const pg = document.getElementById('pagination');
+  pg.innerHTML = '';
+  for (let i = 1; i <= total; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'pag-btn' + (i === currentPage ? ' on' : '');
+    btn.textContent = i;
+    btn.onclick = () => { currentPage = i; renderBoard(); };
+    pg.appendChild(btn);
+  }
+}
+
+function filterCat(cat, el) {
+  currentCat = cat; currentPage = 1;
+  document.querySelectorAll('.bs-item').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  renderBoard();
+}
+function searchBoard() { currentPage = 1; renderBoard(); }
+
+function openPost(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('postCat').textContent = p.catLabel;
+  document.getElementById('postTitle').textContent = p.title;
+  document.getElementById('postDate').textContent = p.date;
+  document.getElementById('postViews').textContent = p.views;
+  document.getElementById('postBody').innerHTML = p.body.replace(/\n/g,'<br>');
+  document.getElementById('postOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePost(e) {
+  if (!e || e.target === document.getElementById('postOverlay') || !e.target) {
+    document.getElementById('postOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+// URL 파라미터로 카테고리 선택
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('cat');
+  if (cat) {
+    const items = document.querySelectorAll('.bs-item');
+    const map = { notice: 1, law: 2, news: 3 };
+    if (map[cat] !== undefined) filterCat(cat, items[map[cat]]);
+    else renderBoard();
+  } else {
+    renderBoard();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="(KS)안전기술 사업분야 - 위험성평가, 안전관리대행, 중대재해처벌법, 안전교육 등">
+  <title>사업분야 | (KS)안전기술</title>
+  <link rel="icon" type="image/png" href="./KS_안전기술_로고.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
+  <style>
+    .svc-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:64px;overflow-x:auto}
+    .svc-tab{padding:14px 24px;font-size:13px;font-weight:700;color:var(--mid-gray);border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;transition:var(--tr);white-space:nowrap}
+    .svc-tab.on,.svc-tab:hover{color:var(--red);border-bottom-color:var(--red)}
+    .svc-panel{display:none}
+    .svc-panel.on{display:block}
+    .svc-detail{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+    .svc-detail img{width:100%;height:400px;object-fit:cover;border-radius:var(--r-lg);box-shadow:var(--sh-lg)}
+    .svc-detail .badge{display:inline-flex;align-items:center;gap:7px;background:var(--red-light);color:var(--red);padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1.5px;margin-bottom:14px}
+    .svc-detail h2{font-size:clamp(22px,2.8vw,34px);font-weight:900;color:var(--navy);margin-bottom:14px;line-height:1.25}
+    .svc-detail .desc{font-size:14px;color:var(--dark-gray);line-height:1.9;margin-bottom:28px}
+    .chklist{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+    .chk-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--dark-gray)}
+    .chk-item::before{content:'✓';color:var(--red);font-weight:900;margin-top:1px;flex-shrink:0}
+    .target-box{background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:24px}
+    .target-box h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px}
+    .target-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .target-tag{font-size:12px;color:var(--navy);background:var(--light);padding:4px 12px;border-radius:100px;font-weight:600}
+    .law-box{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--r);padding:18px 20px}
+    .law-box p{font-size:12px;color:rgba(255,255,255,.55);line-height:1.75}
+    .law-box strong{color:var(--red)}
+    /* 서비스 그리드 (전체 목록) */
+    .all-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:0}
+    .all-card{border:1.5px solid var(--border);border-radius:var(--r-lg);padding:32px 24px;transition:var(--tr);cursor:pointer}
+    .all-card:hover{border-color:var(--red);box-shadow:var(--sh-lg);transform:translateY(-4px)}
+    .all-card .a-no{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--red);margin-bottom:14px}
+    .all-card .a-icon{font-size:36px;margin-bottom:14px}
+    .all-card h3{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:10px}
+    .all-card p{font-size:13px;color:var(--mid-gray);line-height:1.75;margin-bottom:16px}
+    .all-card .a-more{font-size:12px;font-weight:700;color:var(--red)}
+    @media(max-width:1024px){.svc-detail{grid-template-columns:1fr;gap:36px}}
+    @media(max-width:768px){.all-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="page-hero">
+  <div class="wrap">
+    <span class="label">SERVICES</span>
+    <h1>사업분야</h1>
+    <p>산업현장의 안전을 위한 전문적이고 체계적인 서비스를 제공합니다</p>
+    <div class="breadcrumb"><a href="index.html">홈</a><span class="sep">›</span><span class="cur">사업분야</span></div>
+  </div>
+</div>
+
+<section class="sec"><div class="wrap">
+  <div class="svc-tabs" id="svcTabs">
+    <button class="svc-tab on" onclick="switchTab('s1',this)">위험성 평가</button>
+    <button class="svc-tab"    onclick="switchTab('s2',this)">안전보건 문서</button>
+    <button class="svc-tab"    onclick="switchTab('s3',this)">안전 컨설팅</button>
+    <button class="svc-tab"    onclick="switchTab('s4',this)">안전 교육</button>
+    <button class="svc-tab"    onclick="switchTab('s5',this)">중대재해 컨설팅</button>
+    <button class="svc-tab"    onclick="switchTab('s6',this)">안전관리 대행</button>
+  </div>
+
+  <!-- ✏️ 각 탭 내용을 실제 서비스 내용으로 수정하세요 -->
+
+  <!-- S1: 위험성 평가 -->
+  <div class="svc-panel on" id="s1"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="위험성 평가">
+    <div>
+      <span class="badge">SERVICE 01 · 산업안전보건법 제36조</span>
+      <h2>위험성 평가</h2>
+      <p class="desc">사업장 내 유해·위험요인을 체계적으로 파악하고 위험성을 추정·결정하여 감소대책을 수립하는 핵심 안전관리 활동입니다. 위험성평가 인정기관으로서 공신력 있는 서비스를 제공합니다.</p>
+      <div class="chklist">
+        <div class="chk-item">사전 준비 - 위험성평가 계획 수립 및 현장 정보 수집</div>
+        <div class="chk-item">유해·위험요인 파악 - 작업 단위별 체계적 위험요인 발굴</div>
+        <div class="chk-item">위험성 추정·결정 - 빈도·강도 기반 위험성 크기 산출</div>
+        <div class="chk-item">위험성 감소대책 수립 및 실행</div>
+        <div class="chk-item">기록·보존 및 재검토 체계 구축</div>
+      </div>
+      <div class="target-box">
+        <h4>대상 사업장</h4>
+        <div class="target-tags"><span class="target-tag">제조업</span><span class="target-tag">건설업</span><span class="target-tag">서비스업</span><span class="target-tag">물류·유통</span><span class="target-tag">화학업</span><span class="target-tag">전기·전자</span></div>
+      </div>
+      <div class="law-box"><p><strong>관련 법령:</strong> 산업안전보건법 제36조(위험성평가의 실시), 위험성평가에 관한 지침(고용노동부 고시)</p></div>
+    </div>
+  </div></div>
+
+  <!-- S2: 문서 작성 -->
+  <div class="svc-panel" id="s2"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=800&q=80" alt="안전보건 문서">
+    <div>
+      <span class="badge">SERVICE 02 · 법정 문서 시스템</span>
+      <h2>안전보건 문서 작성</h2>
+      <p class="desc">안전보건관리규정, 작업표준서(SOP), 비상대응계획 등 법정 문서의 작성부터 관리 체계 구축까지 일괄 지원합니다. 현장 특성에 맞는 맞춤형 문서 시스템을 구축해 드립니다.</p>
+      <div class="chklist">
+        <div class="chk-item">안전보건관리규정 작성 (산업안전보건법 제25조)</div>
+        <div class="chk-item">작업표준서(SOP) 및 안전작업절차서 작성</div>
+        <div class="chk-item">비상대응계획(ERP) 수립 및 매뉴얼 작성</div>
+        <div class="chk-item">안전보건 방침 및 목표 체계 수립</div>
+        <div class="chk-item">법정 교육 기록부, 점검 일지 양식 개발</div>
+      </div>
+      <div class="target-box"><h4>대상 사업장</h4><div class="target-tags"><span class="target-tag">상시근로자 100인 이상</span><span class="target-tag">위험물 취급 사업장</span><span class="target-tag">건설업</span><span class="target-tag">모든 사업장</span></div></div>
+    </div>
+  </div></div>
+
+  <!-- S3: 안전 컨설팅 -->
+  <div class="svc-panel" id="s3"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80" alt="안전 컨설팅">
+    <div>
+      <span class="badge">SERVICE 03 · 종합 안전진단</span>
+      <h2>안전 컨설팅</h2>
+      <p class="desc">기업의 안전관리 체계를 전반적으로 진단하고 법적 요건 충족을 위한 맞춤형 솔루션을 제공합니다. 현장 방문 진단부터 개선 계획 수립, 이행 지원까지 원스톱으로 제공합니다.</p>
+      <div class="chklist">
+        <div class="chk-item">현장 안전보건 실태 진단 (GAP 분석)</div>
+        <div class="chk-item">산업안전보건법 준수 여부 점검</div>
+        <div class="chk-item">개선 우선순위 도출 및 로드맵 수립</div>
+        <div class="chk-item">안전관리 시스템 구축 컨설팅</div>
+        <div class="chk-item">정기 모니터링 및 이행 지원</div>
+      </div>
+      <div class="target-box"><h4>대상 사업장</h4><div class="target-tags"><span class="target-tag">제조업</span><span class="target-tag">건설업</span><span class="target-tag">전 업종</span><span class="target-tag">신규 사업장</span></div></div>
+    </div>
+  </div></div>
+
+  <!-- S4: 안전 교육 -->
+  <div class="svc-panel" id="s4"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="안전 교육">
+    <div>
+      <span class="badge">SERVICE 04 · 법정 안전보건교육</span>
+      <h2>법정 안전교육</h2>
+      <p class="desc">근로자 정기교육, 관리감독자 교육, 특별교육, 건설업 기초안전보건교육 등 모든 법정 안전보건교육을 전문 강사가 직접 진행합니다.</p>
+      <div class="chklist">
+        <div class="chk-item">근로자 정기 안전보건교육 (분기별 6시간)</div>
+        <div class="chk-item">관리감독자 정기교육 (연간 16시간)</div>
+        <div class="chk-item">신규채용자 안전보건교육</div>
+        <div class="chk-item">특별안전보건교육 (유해·위험 작업)</div>
+        <div class="chk-item">건설업 기초안전보건교육 (4시간)</div>
+      </div>
+      <div class="target-box"><h4>교육 대상</h4><div class="target-tags"><span class="target-tag">일반 근로자</span><span class="target-tag">관리감독자</span><span class="target-tag">신규 채용자</span><span class="target-tag">특수형태 근로자</span></div></div>
+    </div>
+  </div></div>
+
+  <!-- S5: 중대재해 -->
+  <div class="svc-panel" id="s5"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80" alt="중대재해 컨설팅">
+    <div>
+      <span class="badge">SERVICE 05 · 중대재해처벌법 대응</span>
+      <h2>중대재해 컨설팅</h2>
+      <p class="desc">2022년 1월 시행된 중대재해처벌법에 따른 경영책임자의 안전보건 확보 의무 이행을 위한 체계적인 컨설팅 서비스를 제공합니다.</p>
+      <div class="chklist">
+        <div class="chk-item">중대재해처벌법 의무사항 현황 진단</div>
+        <div class="chk-item">안전보건관리체계 구축 (9가지 의무)</div>
+        <div class="chk-item">안전보건 목표 및 경영방침 수립 지원</div>
+        <div class="chk-item">안전보건 전담조직 구성 및 역할 정립</div>
+        <div class="chk-item">이행 점검 및 보완 컨설팅</div>
+      </div>
+      <div class="target-box"><h4>적용 대상</h4><div class="target-tags"><span class="target-tag">상시근로자 5인 이상</span><span class="target-tag">원청·도급사</span><span class="target-tag">건설업 50억 이상</span></div></div>
+      <div class="law-box"><p><strong>관련 법령:</strong> 중대재해 처벌 등에 관한 법률(2022.01.27 시행), 상시근로자 5인 미만 사업장 2024.01.27부터 전면 적용</p></div>
+    </div>
+  </div></div>
+
+  <!-- S6: 안전관리 대행 -->
+  <div class="svc-panel" id="s6"><div class="svc-detail">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="안전관리 대행">
+    <div>
+      <span class="badge">SERVICE 06 · 안전관리전문기관</span>
+      <h2>안전관리 대행</h2>
+      <p class="desc">고용노동부 지정 안전관리전문기관으로서 안전관리자 선임 의무 사업장의 안전관리자 업무를 전문적으로 대행합니다. 정기 방문을 통해 실질적인 현장 안전관리를 수행합니다.</p>
+      <div class="chklist">
+        <div class="chk-item">정기 현장 방문 안전점검 (월 1~4회)</div>
+        <div class="chk-item">위험요인 발굴 및 개선 지도</div>
+        <div class="chk-item">법정 서류 관리 및 행정 지원</div>
+        <div class="chk-item">산업재해 발생 시 원인 조사 지원</div>
+        <div class="chk-item">고용노동부 감독 대응 지원</div>
+      </div>
+      <div class="target-box"><h4>대상 사업장</h4><div class="target-tags"><span class="target-tag">상시근로자 50인 미만</span><span class="target-tag">안전관리자 선임 의무</span><span class="target-tag">고위험 사업장</span></div></div>
+    </div>
+  </div></div>
+</div></section>
+
+<!-- 전체 서비스 목록 카드 -->
+<section class="sec" style="background:var(--off-white)"><div class="wrap">
+  <div class="sec-head fu"><span class="label">ALL SERVICES</span><h2 class="h2">전체 서비스 한눈에 보기</h2></div>
+  <div class="all-grid">
+    <div class="all-card fu" onclick="switchTabGo('s1')"><div class="a-no">SERVICE 01</div><div class="a-icon">⚠️</div><h3>위험성 평가</h3><p>사업장 유해·위험요인 체계적 파악 및 감소대책 수립</p><span class="a-more">자세히 보기 →</span></div>
+    <div class="all-card fu fu-d1" onclick="switchTabGo('s2')"><div class="a-no">SERVICE 02</div><div class="a-icon">📄</div><h3>안전보건 문서 작성</h3><p>법정 안전보건 문서 작성 및 관리 시스템 구축</p><span class="a-more">자세히 보기 →</span></div>
+    <div class="all-card fu fu-d2" onclick="switchTabGo('s3')"><div class="a-no">SERVICE 03</div><div class="a-icon">🔍</div><h3>안전 컨설팅</h3><p>현장 진단부터 개선 계획 수립·이행까지 원스톱 지원</p><span class="a-more">자세히 보기 →</span></div>
+    <div class="all-card fu fu-d3" onclick="switchTabGo('s4')"><div class="a-no">SERVICE 04</div><div class="a-icon">📚</div><h3>법정 안전교육</h3><p>근로자·관리감독자 법정 의무 안전보건교육 대행</p><span class="a-more">자세히 보기 →</span></div>
+    <div class="all-card fu fu-d1" onclick="switchTabGo('s5')"><div class="a-no">SERVICE 05</div><div class="a-icon">⚖️</div><h3>중대재해 컨설팅</h3><p>중대재해처벌법 대응 안전보건관리체계 구축</p><span class="a-more">자세히 보기 →</span></div>
+    <div class="all-card fu fu-d2" onclick="switchTabGo('s6')"><div class="a-no">SERVICE 06</div><div class="a-icon">🏗️</div><h3>안전관리 대행</h3><p>안전관리자 선임 의무 사업장 안전관리자 업무 대행</p><span class="a-more">자세히 보기 →</span></div>
+  </div>
+</div></section>
+
+<footer id="site-footer"></footer>
+<script src="./assets/common.js"></script>
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.svc-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.svc-tab').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({ top: document.getElementById('svcTabs').offsetTop - 130, behavior: 'smooth' });
+}
+function switchTabGo(id) {
+  const tabs = document.querySelectorAll('.svc-tab');
+  const ids = ['s1','s2','s3','s4','s5','s6'];
+  switchTab(id, tabs[ids.indexOf(id)]);
+}
+// URL 해시로 탭 자동 선택
+window.addEventListener('DOMContentLoaded', () => {
+  const h = window.location.hash.replace('#','');
+  if (h && ['s1','s2','s3','s4','s5','s6'].includes(h)) switchTabGo(h);
+});
+</script>
+</body>
+</html>

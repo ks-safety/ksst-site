@@ -1,363 +1,270 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SafeGuard 산업안전컨설팅</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --navy: #0d1f3c;
-    --navy2: #162d54;
-    --blue: #1a56a0;
-    --accent: #e8a020;
-    --light: #f4f7fb;
-    --gray: #6b7a90;
-    --white: #ffffff;
-  }
-  body { font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif; color: #222; background: var(--white); }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; width: 100%; background: var(--navy);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 60px; height: 64px; z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-  }
-  .logo { color: var(--white); font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
-  .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { color: #cdd6e8; text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--accent); }
-
-  /* SECTIONS */
-  section { scroll-margin-top: 64px; }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, #1a3a6e 100%);
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 100px 20px 60px;
-    position: relative; overflow: hidden;
-  }
-  .hero::before {
-    content: ''; position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .hero-content { position: relative; z-index: 1; max-width: 800px; }
-  .hero-badge {
-    display: inline-block; background: rgba(232,160,32,0.15); border: 1px solid var(--accent);
-    color: var(--accent); padding: 6px 18px; border-radius: 20px; font-size: 0.82rem;
-    font-weight: 600; letter-spacing: 2px; margin-bottom: 28px;
-  }
-  .hero h1 { color: var(--white); font-size: 3.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 20px; }
-  .hero h1 span { color: var(--accent); }
-  .hero p { color: #a8bcd8; font-size: 1.1rem; line-height: 1.8; margin-bottom: 40px; }
-  .btn-primary {
-    background: var(--accent); color: var(--navy); padding: 14px 36px;
-    border: none; border-radius: 4px; font-size: 1rem; font-weight: 700;
-    cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s;
-  }
-  .btn-primary:hover { background: #f0b030; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,160,32,0.4); }
-  .btn-outline {
-    background: transparent; color: var(--white); padding: 14px 36px;
-    border: 1.5px solid rgba(255,255,255,0.4); border-radius: 4px; font-size: 1rem; font-weight: 600;
-    cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; margin-left: 14px;
-  }
-  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
-
-  .stats {
-    display: flex; justify-content: center; gap: 60px; margin-top: 70px;
-    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;
-  }
-  .stat-item { text-align: center; }
-  .stat-num { color: var(--accent); font-size: 2.2rem; font-weight: 800; }
-  .stat-label { color: #7a9abf; font-size: 0.85rem; margin-top: 4px; }
-
-  /* ABOUT */
-  #about { background: var(--white); padding: 100px 60px; }
-  .section-header { text-align: center; margin-bottom: 60px; }
-  .section-tag { color: var(--blue); font-size: 0.82rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
-  .section-title { font-size: 2.2rem; font-weight: 800; color: var(--navy); margin-bottom: 16px; }
-  .section-desc { color: var(--gray); font-size: 1rem; line-height: 1.8; max-width: 560px; margin: 0 auto; }
-
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1100px; margin: 0 auto; align-items: center; }
-  .about-text p { color: #444; line-height: 1.9; margin-bottom: 20px; font-size: 0.97rem; }
-  .about-features { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
-  .feature-item { display: flex; align-items: flex-start; gap: 14px; }
-  .feature-icon { width: 40px; height: 40px; background: var(--light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-  .feature-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-  .feature-item p { font-size: 0.85rem; color: var(--gray); }
-
-  .timeline { position: relative; }
-  .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: var(--light); }
-  .tl-item { display: flex; gap: 24px; margin-bottom: 28px; position: relative; }
-  .tl-dot { width: 42px; height: 42px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.75rem; font-weight: 700; flex-shrink: 0; z-index: 1; }
-  .tl-content h4 { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
-  .tl-content p { font-size: 0.83rem; color: var(--gray); margin-top: 3px; }
-
-  /* SERVICES */
-  #services { background: var(--light); padding: 100px 60px; }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
-  .service-card {
-    background: var(--white); border-radius: 12px; padding: 36px 28px;
-    box-shadow: 0 2px 16px rgba(13,31,60,0.07); transition: all 0.25s;
-    border-top: 3px solid transparent;
-  }
-  .service-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(13,31,60,0.13); border-top-color: var(--accent); }
-  .svc-icon { font-size: 2.4rem; margin-bottom: 18px; }
-  .service-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
-  .service-card p { font-size: 0.88rem; color: var(--gray); line-height: 1.75; }
-  .svc-tag { display: inline-block; margin-top: 16px; font-size: 0.75rem; color: var(--blue); font-weight: 600; }
-
-  /* PORTFOLIO */
-  #portfolio { background: var(--white); padding: 100px 60px; }
-  .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
-  .portfolio-card {
-    background: var(--light); border-radius: 10px; padding: 24px 20px;
-    text-align: center; transition: all 0.2s;
-  }
-  .portfolio-card:hover { background: var(--navy); }
-  .portfolio-card:hover .pc-name { color: var(--white); }
-  .portfolio-card:hover .pc-type { color: var(--accent); }
-  .pc-logo { width: 52px; height: 52px; background: var(--white); border-radius: 10px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-  .pc-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
-  .pc-type { font-size: 0.78rem; color: var(--gray); margin-top: 4px; }
-
-  /* CONTACT */
-  #contact { background: var(--navy); padding: 100px 60px; }
-  #contact .section-title { color: var(--white); }
-  #contact .section-desc { color: #7a9abf; }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1000px; margin: 0 auto; }
-  .contact-info { color: #a8bcd8; }
-  .contact-info h3 { color: var(--white); font-size: 1.3rem; margin-bottom: 24px; }
-  .ci-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
-  .ci-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.07); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-  .ci-item h4 { color: var(--white); font-size: 0.88rem; margin-bottom: 4px; }
-  .ci-item p { font-size: 0.85rem; color: #7a9abf; }
-  .contact-form { display: flex; flex-direction: column; gap: 14px; }
-  .contact-form input, .contact-form textarea, .contact-form select {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 6px; padding: 13px 16px; color: var(--white); font-size: 0.9rem;
-    outline: none; transition: border 0.2s; width: 100%;
-  }
-  .contact-form input::placeholder, .contact-form textarea::placeholder { color: #5a7299; }
-  .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
-  .contact-form textarea { height: 120px; resize: vertical; }
-  .contact-form .btn-primary { width: 100%; text-align: center; margin-left: 0; }
-
-  /* FOOTER */
-  footer {
-    background: #081428; color: #5a7299; text-align: center;
-    padding: 28px; font-size: 0.83rem; border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  footer span { color: var(--accent); }
-
-  /* SCROLL ACTIVE */
-  .nav-links a.active { color: var(--accent); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="(KS)안전기술 - 산업안전 컨설팅 및 산업현장 안전지도 전문기관. 고용노동부 인정 안전관리전문기관.">
+  <title>(KS)안전기술 | Korea Standard Safety Tech.</title>
+  <link rel="icon" type="image/png" href="./KS_안전기술_로고.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/common.css">
+  <style>
+    .hero-wrap{position:relative;min-height:100vh;overflow:hidden}
+    .h-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+    .h-slide.on{opacity:1}
+    .h-slide img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+    .h-overlay{position:absolute;inset:0;background:linear-gradient(110deg,rgba(6,15,31,.88) 0%,rgba(11,30,61,.68) 45%,rgba(11,30,61,.28) 100%)}
+    .h-content{position:absolute;inset:0;display:flex;align-items:center;padding-top:60px;padding-bottom:160px}
+    .h-text{max-width:680px}
+    .h-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,16,46,.88);backdrop-filter:blur(8px);color:#fff;padding:5px 18px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:1.2px;margin-bottom:24px}
+    .h-title{font-size:clamp(34px,5vw,64px);font-weight:900;line-height:1.14;color:#fff;margin-bottom:20px;letter-spacing:-1px}
+    .h-title em{color:var(--red);font-style:normal}
+    .h-desc{font-size:clamp(14px,1.5vw,17px);color:rgba(255,255,255,.70);line-height:1.85;margin-bottom:36px}
+    .h-btns{display:flex;gap:12px;flex-wrap:wrap}
+    .h-dots{position:absolute;bottom:176px;right:56px;display:flex;flex-direction:column;gap:9px;z-index:5}
+    .h-dot{width:3px;height:28px;border-radius:3px;background:rgba(255,255,255,.28);cursor:pointer;transition:var(--tr)}
+    .h-dot.on{height:48px;background:var(--red)}
+    .hero-stat-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(11,30,61,.93);backdrop-filter:blur(12px);border-top:2px solid var(--red)}
+    .hero-stat-inner{display:grid;grid-template-columns:repeat(4,1fr);max-width:1280px;margin:0 auto}
+    .h-stat{padding:22px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+    .h-stat:last-child{border-right:none}
+    .h-stat-num{font-size:34px;font-weight:900;color:#fff;line-height:1;display:flex;align-items:baseline;justify-content:center;gap:2px}
+    .h-stat-num sup{font-size:16px;color:var(--red);font-weight:700}
+    .h-stat-label{font-size:11px;color:rgba(255,255,255,.42);margin-top:5px}
+    .ticker{background:var(--light);border-bottom:1px solid var(--border);padding:10px 0;overflow:hidden}
+    .ticker .wrap{display:flex;align-items:center;gap:16px}
+    .ticker-tag{background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:3px 12px;border-radius:100px;letter-spacing:1.5px;flex-shrink:0}
+    .ticker-scroll{flex:1;overflow:hidden}
+    .ticker-inner{display:flex;gap:48px;animation:ticker 28s linear infinite;white-space:nowrap}
+    .ticker-inner a{font-size:12px;color:var(--dark-gray);transition:var(--tr)}
+    .ticker-inner a:hover{color:var(--red)}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .about-mini{background:var(--white)}
+    .about-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+    .about-mini-img{position:relative}
+    .about-mini-img img{width:100%;height:500px;object-fit:cover;border-radius:var(--r-lg);box-shadow:var(--sh-lg)}
+    .about-badge{position:absolute;bottom:-24px;right:-24px;background:var(--red);color:#fff;padding:22px 26px;border-radius:var(--r-lg);box-shadow:0 8px 32px rgba(200,16,46,.38);text-align:center}
+    .about-badge b{display:block;font-size:40px;font-weight:900;line-height:1}
+    .about-badge span{font-size:11px;opacity:.82}
+    .about-feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px}
+    .feat{background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 16px;transition:var(--tr)}
+    .feat:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:var(--sh)}
+    .feat-icon{font-size:22px;margin-bottom:7px}
+    .feat h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px}
+    .feat p{font-size:12px;color:var(--mid-gray);line-height:1.55}
+    .svc-sec{background:var(--navy);position:relative;overflow:hidden;padding:100px 0}
+    .svc-sec::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 80%,rgba(200,16,46,.09) 0%,transparent 50%)}
+    .svc-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+    .svc-header .h2{color:#fff;margin-bottom:0}
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .svc-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--r-lg);padding:34px 26px;transition:var(--tr);position:relative;overflow:hidden}
+    .svc-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:var(--tr)}
+    .svc-card:hover{background:rgba(255,255,255,.08);border-color:rgba(200,16,46,.35);transform:translateY(-7px)}
+    .svc-card:hover::after{transform:scaleX(1)}
+    .svc-no{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--red);margin-bottom:18px;opacity:.75}
+    .svc-icon{font-size:38px;margin-bottom:15px}
+    .svc-card h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px}
+    .svc-card p{font-size:13px;color:rgba(255,255,255,.50);line-height:1.75;margin-bottom:20px}
+    .svc-more{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--red);transition:var(--tr);cursor:pointer;text-decoration:none}
+    .svc-more:hover{gap:9px}
+    .proc-sec{background:var(--off-white)}
+    .proc-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:60px;position:relative}
+    .proc-steps::before{content:'';position:absolute;top:38px;left:9%;right:9%;height:2px;background:linear-gradient(to right,var(--red),var(--navy));z-index:0}
+    .proc-step{text-align:center;padding:0 10px;position:relative;z-index:1}
+    .proc-circle{width:76px;height:76px;background:#fff;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:24px;transition:var(--tr);box-shadow:var(--sh)}
+    .proc-step:hover .proc-circle{border-color:var(--red);transform:scale(1.06);box-shadow:0 4px 20px rgba(200,16,46,.22)}
+    .proc-step .no{font-size:10px;font-weight:700;color:var(--red);letter-spacing:2px;margin-bottom:7px}
+    .proc-step h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+    .proc-step p{font-size:12px;color:var(--mid-gray);line-height:1.6}
+    .board-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px}
+    .b-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .b-tit2{font-size:18px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:7px}
+    .b-tit2::before{content:'';display:block;width:5px;height:5px;background:var(--red);border-radius:50%}
+    .more-link{font-size:12px;color:var(--mid-gray);font-weight:600;transition:var(--tr)}
+    .more-link:hover{color:var(--red)}
+    .b-list{border-top:2px solid var(--navy)}
+    .b-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);transition:var(--tr);cursor:pointer}
+    .b-item:hover{padding-left:5px}
+    .b-item:hover .b-item-tit{color:var(--red)}
+    .b-cat{font-size:10px;font-weight:800;color:#fff;background:var(--navy);padding:2px 8px;border-radius:4px;flex-shrink:0}
+    .b-cat.red{background:var(--red)}
+    .b-item-tit{flex:1;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:var(--tr)}
+    .b-date{font-size:11px;color:var(--mid-gray);flex-shrink:0}
+    .cta-sec{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 100%);padding:80px 0;position:relative;overflow:hidden}
+    .cta-sec::after{content:'';position:absolute;right:-120px;top:-120px;width:480px;height:480px;background:radial-gradient(circle,rgba(200,16,46,.14) 0%,transparent 70%);pointer-events:none}
+    .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative}
+    .cta-inner h2{font-size:clamp(22px,2.8vw,36px);font-weight:900;color:#fff;margin-bottom:10px}
+    .cta-inner p{font-size:15px;color:rgba(255,255,255,.55)}
+    .cta-btns{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap}
+    .clients-sec{background:var(--light);padding:50px 0}
+    .clients-tit{text-align:center;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--mid-gray);text-transform:uppercase;margin-bottom:28px}
+    .clients-track{overflow:hidden}
+    .clients-inner{display:flex;align-items:center;gap:14px;animation:clients 22s linear infinite}
+    .cl-logo{display:flex;align-items:center;justify-content:center;padding:12px 26px;min-width:148px;height:54px;background:#fff;border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:700;color:var(--mid-gray);flex-shrink:0;transition:var(--tr)}
+    .cl-logo:hover{border-color:var(--red);color:var(--navy)}
+    @keyframes clients{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @media(max-width:1024px){.about-mini-grid{grid-template-columns:1fr;gap:48px}.svc-grid{grid-template-columns:1fr 1fr}.proc-steps{grid-template-columns:repeat(3,1fr)}.proc-steps::before{display:none}}
+    @media(max-width:768px){.hero-stat-inner{grid-template-columns:1fr 1fr}.svc-grid{grid-template-columns:1fr}.about-feats{grid-template-columns:1fr}.board-mini-grid{grid-template-columns:1fr;gap:32px}.about-badge{right:0;bottom:-18px}.h-dots{display:none}.cta-inner{text-align:center;justify-content:center}}
+  </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav>
-  <div class="logo">Safe<span>Guard</span> 안전컨설팅</div>
-  <ul class="nav-links">
-    <li><a href="#hero">홈</a></li>
-    <li><a href="#about">회사소개</a></li>
-    <li><a href="#services">서비스</a></li>
-    <li><a href="#portfolio">실적</a></li>
-    <li><a href="#contact">문의</a></li>
-  </ul>
-</nav>
+<div class="hero-wrap">
+  <div class="h-slide on">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80" alt="산업현장 안전" loading="eager">
+    <div class="h-overlay"></div>
+    <div class="h-content"><div class="wrap"><div class="h-text">
+      <span class="h-badge">🛡️ Korea Standard Safety Tech.</span>
+      <h1 class="h-title">안전한 일터를<br><em>함께 만들어갑니다</em></h1>
+      <p class="h-desc">(KS)안전기술은 산업현장의 안전문화 정착을 위해<br>전문 컨설팅과 현장 안전지도를 제공합니다.</p>
+      <div class="h-btns"><a href="services.html" class="btn btn-red">사업분야 알아보기 →</a><a href="inquiry.html" class="btn btn-ghost">무료 상담 신청</a></div>
+    </div></div></div>
+  </div>
+  <div class="h-slide">
+    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" alt="기업 빌딩" loading="lazy">
+    <div class="h-overlay"></div>
+    <div class="h-content"><div class="wrap"><div class="h-text">
+      <span class="h-badge">⚖️ 중대재해처벌법 대응</span>
+      <h1 class="h-title">중대재해처벌법<br><em>완벽 대응 솔루션</em></h1>
+      <p class="h-desc">급변하는 안전 법규에 선제 대응하여<br>귀사의 안전관리체계를 구축해 드립니다.</p>
+      <div class="h-btns"><a href="services.html" class="btn btn-red">중대재해 컨설팅 →</a><a href="inquiry.html" class="btn btn-ghost">전문가 상담</a></div>
+    </div></div></div>
+  </div>
+  <div class="h-slide">
+    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80" alt="안전 교육" loading="lazy">
+    <div class="h-overlay"></div>
+    <div class="h-content"><div class="wrap"><div class="h-text">
+      <span class="h-badge">📚 안전교육 전문기관</span>
+      <h1 class="h-title">체계적 안전교육으로<br><em>사고를 예방합니다</em></h1>
+      <p class="h-desc">이론·실습 결합 맞춤 교육으로<br>현장 근로자의 안전 역량을 높여드립니다.</p>
+      <div class="h-btns"><a href="services.html" class="btn btn-red">안전교육 프로그램 →</a><a href="inquiry.html" class="btn btn-ghost">교육 문의하기</a></div>
+    </div></div></div>
+  </div>
+  <div class="h-dots" id="hDots">
+    <button class="h-dot on" data-i="0"></button>
+    <button class="h-dot" data-i="1"></button>
+    <button class="h-dot" data-i="2"></button>
+  </div>
+  <div class="hero-stat-bar">
+    <div class="hero-stat-inner">
+      <div class="h-stat"><div class="h-stat-num"><span class="cnt" data-n="500">0</span><sup>+건</sup></div><div class="h-stat-label">누적 컨설팅</div></div>
+      <div class="h-stat"><div class="h-stat-num"><span class="cnt" data-n="200">0</span><sup>+개</sup></div><div class="h-stat-label">고객사 수</div></div>
+      <div class="h-stat"><div class="h-stat-num"><span class="cnt" data-n="16">0</span><sup>년+</sup></div><div class="h-stat-label">전문 업력</div></div>
+      <div class="h-stat"><div class="h-stat-num"><span class="cnt" data-n="98">0</span><sup>%</sup></div><div class="h-stat-label">고객 만족도</div></div>
+    </div>
+  </div>
+</div>
 
-<!-- HERO -->
-<section id="hero" class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">🛡️ CERTIFIED SAFETY CONSULTANT</div>
-    <h1>안전한 현장,<br><span>신뢰할 수 있는 파트너</span></h1>
-    <p>산업 현장의 위험을 분석하고 체계적인 안전관리 시스템을 구축합니다.<br>위험성평가부터 안전 컨설팅까지, 전문가가 함께합니다.</p>
-    <a href="#contact" class="btn-primary">무료 상담 신청</a>
-    <a href="#services" class="btn-outline">서비스 보기</a>
-    <div class="stats">
-      <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">컨설팅 수행 실적</div></div>
-      <div class="stat-item"><div class="stat-num">15년</div><div class="stat-label">업계 전문 경험</div></div>
-      <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">고객 만족도</div></div>
-      <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">협력 기업</div></div>
-    </div>
-  </div>
-</section>
+<div class="ticker"><div class="wrap"><span class="ticker-tag">NOTICE</span><div class="ticker-scroll"><div class="ticker-inner">
+  <a href="board.html">📢 2025년 산업안전보건법 개정 주요 내용 안내</a>
+  <a href="board.html">📢 중대재해처벌법 적용 범위 확대(2024.01.27~) 안내</a>
+  <a href="board.html">📢 위험성평가 인정 제도 개선 사항 공지</a>
+  <a href="board.html">📢 2025년 하반기 안전교육 일정 공지</a>
+  <a href="board.html">📢 (KS)안전기술 홈페이지 리뉴얼 오픈 안내</a>
+  <a href="board.html">📢 2025년 산업안전보건법 개정 주요 내용 안내</a>
+  <a href="board.html">📢 중대재해처벌법 적용 범위 확대(2024.01.27~) 안내</a>
+  <a href="board.html">📢 위험성평가 인정 제도 개선 사항 공지</a>
+  <a href="board.html">📢 2025년 하반기 안전교육 일정 공지</a>
+  <a href="board.html">📢 (KS)안전기술 홈페이지 리뉴얼 오픈 안내</a>
+</div></div></div></div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-header">
-    <div class="section-tag">About Us</div>
-    <h2 class="section-title">전문성과 신뢰로 함께하는<br>산업안전 파트너</h2>
-    <p class="section-desc">산업현장의 안전을 최우선으로 생각하며, 체계적인 위험성 평가와 안전관리 솔루션을 제공합니다.</p>
+<section class="sec about-mini"><div class="wrap"><div class="about-mini-grid">
+  <div class="about-mini-img fu">
+    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80" alt="(KS)안전기술">
+    <div class="about-badge"><b>16<sup style="font-size:18px">+</sup></b><span>년간의 신뢰</span></div>
   </div>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>SafeGuard 안전컨설팅은 산업안전보건법에 기반한 체계적인 안전관리 시스템 구축을 지원합니다. 제조업, 건설업, 서비스업 등 다양한 업종에서 축적된 전문 경험을 바탕으로 현장 맞춤형 솔루션을 제공합니다.</p>
-      <p>공인 산업안전지도사 및 안전관리전문기관으로서 법정 의무 사항 이행부터 자율 안전문화 정착까지 전 과정을 지원합니다.</p>
-      <div class="about-features">
-        <div class="feature-item">
-          <div class="feature-icon">🎓</div>
-          <div><h4>공인 전문 자격 보유</h4><p>산업안전지도사, 안전관리전문기관 지정</p></div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">📋</div>
-          <div><h4>법정 요건 완벽 충족</h4><p>산업안전보건법 기반 컴플라이언스 지원</p></div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🤝</div>
-          <div><h4>현장 밀착형 서비스</h4><p>업종 특성에 맞는 맞춤형 안전관리 시스템</p></div>
-        </div>
-      </div>
+  <div class="fu fu-d1">
+    <span class="label">ABOUT US</span>
+    <h2 class="h2">대한민국 산업안전의<br>믿음직한 파트너</h2>
+    <p class="lead">(KS)안전기술은 2009년 설립 이후 강원 지역을 기반으로 전국 산업현장의 안전문화 정착을 위해 전문 컨설팅과 안전지도를 제공해왔습니다. 풍부한 현장 경험과 전문성을 바탕으로 귀사의 안전관리체계를 구축해 드립니다.</p>
+    <div class="about-feats">
+      <div class="feat"><div class="feat-icon">🏆</div><h4>공인 전문기관</h4><p>고용노동부 인정 안전관리 전문기관</p></div>
+      <div class="feat"><div class="feat-icon">👨‍💼</div><h4>전문 인력 보유</h4><p>산업안전지도사·기사 등 고급 전문 인력</p></div>
+      <div class="feat"><div class="feat-icon">📊</div><h4>체계적 관리 시스템</h4><p>ISO 기반 안전관리 시스템 구축·지원</p></div>
+      <div class="feat"><div class="feat-icon">📞</div><h4>신속 현장 대응</h4><p>긴급 상황 신속 대응 및 전문 지원</p></div>
     </div>
-    <div class="timeline">
-      <div class="tl-item"><div class="tl-dot">2009</div><div class="tl-content"><h4>회사 설립</h4><p>산업안전컨설팅 전문기업으로 출발</p></div></div>
-      <div class="tl-item"><div class="tl-dot">2013</div><div class="tl-content"><h4>안전관리전문기관 지정</h4><p>고용노동부 공인 안전관리전문기관 등록</p></div></div>
-      <div class="tl-item"><div class="tl-dot">2017</div><div class="tl-content"><h4>위험성평가 인정기관 선정</h4><p>산업안전보건공단 위험성평가 인정기관 선정</p></div></div>
-      <div class="tl-item"><div class="tl-dot">2020</div><div class="tl-content"><h4>중대재해처벌법 대응팀 신설</h4><p>법 시행 대비 전담 컨설팅팀 운영 시작</p></div></div>
-      <div class="tl-item"><div class="tl-dot">2024</div><div class="tl-content"><h4>누적 500개사 돌파</h4><p>컨설팅 수행 기업 500개사 달성</p></div></div>
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="about.html" class="btn btn-red">기업소개 보기 →</a>
+      <a href="about.html#certs" class="btn btn-navy">인증 현황 확인</a>
     </div>
   </div>
-</section>
+</div></div></section>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="section-header">
-    <div class="section-tag">Services</div>
-    <h2 class="section-title">주요 서비스</h2>
-    <p class="section-desc">산업 현장의 안전을 위한 전문적이고 체계적인 서비스를 제공합니다.</p>
+<section class="svc-sec"><div class="wrap">
+  <div class="svc-header">
+    <div><span class="label" style="color:rgba(255,255,255,.4)">SERVICES</span><h2 class="h2" style="color:#fff;margin-bottom:0">전문 안전관리 서비스</h2></div>
+    <a href="services.html" class="btn btn-red">전체 보기 →</a>
   </div>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="svc-icon">⚠️</div>
-      <h3>위험성평가</h3>
-      <p>사업장 내 유해·위험요인을 체계적으로 파악하고 위험성을 추정·결정하여 감소대책을 수립합니다.</p>
-      <span class="svc-tag">▶ 산업안전보건법 제36조 기반</span>
-    </div>
-    <div class="service-card">
-      <div class="svc-icon">🏗️</div>
-      <h3>안전관리 대행</h3>
-      <p>50인 미만 사업장을 대상으로 안전관리자 역할을 수행하는 안전관리 위탁 서비스를 제공합니다.</p>
-      <span class="svc-tag">▶ 안전관리전문기관 지정</span>
-    </div>
-    <div class="service-card">
-      <div class="svc-icon">⚖️</div>
-      <h3>중대재해처벌법 대응</h3>
-      <p>중대재해처벌법 의무 이행을 위한 안전보건관리체계 구축 및 이행점검을 지원합니다.</p>
-      <span class="svc-tag">▶ 경영자 의무 이행 지원</span>
-    </div>
-    <div class="service-card">
-      <div class="svc-icon">📚</div>
-      <h3>법정 안전교육</h3>
-      <p>근로자 정기교육, 관리감독자 교육, 특별교육 등 법정 의무 안전보건교육을 대행합니다.</p>
-      <span class="svc-tag">▶ 산업안전보건교육 전문</span>
-    </div>
-    <div class="service-card">
-      <div class="svc-icon">🔍</div>
-      <h3>안전진단 & 감사</h3>
-      <p>현장 안전수준을 객관적으로 평가하고 개선 우선순위를 도출하는 안전보건 진단 서비스입니다.</p>
-      <span class="svc-tag">▶ Gap 분석 및 개선 로드맵</span>
-    </div>
-    <div class="service-card">
-      <div class="svc-icon">📄</div>
-      <h3>안전보건 문서 작성</h3>
-      <p>안전보건관리규정, 작업표준서(SOP), 비상대응계획 등 법정 문서 작성 및 관리를 지원합니다.</p>
-      <span class="svc-tag">▶ 맞춤형 문서 시스템 구축</span>
-    </div>
+  <div class="svc-grid">
+    <div class="svc-card fu"><div class="svc-no">SERVICE 01</div><div class="svc-icon">⚠️</div><h3>위험성 평가</h3><p>사업장 내 유해·위험요인을 체계적으로 파악하고 위험성을 추정·결정하여 감소대책을 수립합니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
+    <div class="svc-card fu fu-d1"><div class="svc-no">SERVICE 02</div><div class="svc-icon">🏗️</div><h3>안전관리 대행</h3><p>안전관리자 선임 의무 사업장을 대상으로 안전관리자 업무를 전문적으로 대행합니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
+    <div class="svc-card fu fu-d2"><div class="svc-no">SERVICE 03</div><div class="svc-icon">⚖️</div><h3>중대재해 컨설팅</h3><p>중대재해처벌법 대응 안전보건관리체계 구축 및 이행 점검, 개선방안을 컨설팅합니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
+    <div class="svc-card fu fu-d3"><div class="svc-no">SERVICE 04</div><div class="svc-icon">📚</div><h3>법정 안전교육</h3><p>근로자 정기교육, 관리감독자 교육, 특별교육 등 법정 의무 안전보건교육을 대행합니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
+    <div class="svc-card fu fu-d1"><div class="svc-no">SERVICE 05</div><div class="svc-icon">🔍</div><h3>안전진단 & 감사</h3><p>현장 안전수준을 객관적으로 평가하고 개선 우선순위를 도출하는 진단 서비스입니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
+    <div class="svc-card fu fu-d2"><div class="svc-no">SERVICE 06</div><div class="svc-icon">📄</div><h3>안전보건 문서 작성</h3><p>안전보건관리규정, SOP, 비상대응계획 등 법정 문서 작성 및 관리를 지원합니다.</p><a href="services.html" class="svc-more">자세히 보기 →</a></div>
   </div>
-</section>
+</div></section>
 
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="section-header">
-    <div class="section-tag">Portfolio</div>
-    <h2 class="section-title">주요 수행 실적</h2>
-    <p class="section-desc">다양한 업종의 기업들과 안전한 현장을 만들어왔습니다.</p>
+<section class="sec proc-sec"><div class="wrap">
+  <div class="sec-head fu"><span class="label">PROCESS</span><h2 class="h2">서비스 진행 프로세스</h2><p class="lead">고객사 상황에 맞는 최적의 솔루션을 체계적인 프로세스로 제공합니다</p></div>
+  <div class="proc-steps">
+    <div class="proc-step fu"><div class="proc-circle">📞</div><div class="no">STEP 01</div><h4>상담 신청</h4><p>온라인·전화 초기 상담</p></div>
+    <div class="proc-step fu fu-d1"><div class="proc-circle">🔎</div><div class="no">STEP 02</div><h4>현장 진단</h4><p>전문가 방문 현장 진단</p></div>
+    <div class="proc-step fu fu-d2"><div class="proc-circle">📋</div><div class="no">STEP 03</div><h4>계획 수립</h4><p>맞춤형 안전관리 계획</p></div>
+    <div class="proc-step fu fu-d3"><div class="proc-circle">⚙️</div><div class="no">STEP 04</div><h4>서비스 실행</h4><p>체계적 서비스 실행</p></div>
+    <div class="proc-step fu fu-d4"><div class="proc-circle">✅</div><div class="no">STEP 05</div><h4>사후 관리</h4><p>지속적 모니터링</p></div>
   </div>
-  <div class="portfolio-grid">
-    <div class="portfolio-card"><div class="pc-logo">🏭</div><div class="pc-name">A 제조㈜</div><div class="pc-type">위험성평가 / 안전관리 대행</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🏗️</div><div class="pc-name">B 건설㈜</div><div class="pc-type">중대재해처벌법 컨설팅</div></div>
-    <div class="portfolio-card"><div class="pc-logo">⚡</div><div class="pc-name">C 전기㈜</div><div class="pc-type">안전진단 / 교육</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🚚</div><div class="pc-name">D 물류㈜</div><div class="pc-name">안전보건체계 구축</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🔧</div><div class="pc-name">E 기계㈜</div><div class="pc-type">위험성평가 / 문서 작성</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🏥</div><div class="pc-name">F 의료재단</div><div class="pc-type">법정 안전교육 대행</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🍽️</div><div class="pc-name">G 식품㈜</div><div class="pc-type">안전관리 대행</div></div>
-    <div class="portfolio-card"><div class="pc-logo">🏢</div><div class="pc-name">H 서비스㈜</div><div class="pc-type">중대재해처벌법 대응</div></div>
-  </div>
-</section>
+</div></section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-header">
-    <div class="section-tag" style="color:#e8a020">Contact</div>
-    <h2 class="section-title">문의하기</h2>
-    <p class="section-desc">안전에 관한 모든 문의를 환영합니다. 전문가가 신속하게 답변드립니다.</p>
-  </div>
-  <div class="contact-grid">
-    <div class="contact-info">
-      <h3>연락처 정보</h3>
-      <div class="ci-item">
-        <div class="ci-icon">📍</div>
-        <div><h4>주소</h4><p>강원특별자치도 강릉시 000로 00<br>SafeGuard 빌딩 3층</p></div>
-      </div>
-      <div class="ci-item">
-        <div class="ci-icon">📞</div>
-        <div><h4>전화</h4><p>033-000-0000</p></div>
-      </div>
-      <div class="ci-item">
-        <div class="ci-icon">✉️</div>
-        <div><h4>이메일</h4><p>info@safeguard.co.kr</p></div>
-      </div>
-      <div class="ci-item">
-        <div class="ci-icon">🕐</div>
-        <div><h4>운영시간</h4><p>평일 09:00 ~ 18:00<br>토·일·공휴일 휴무</p></div>
-      </div>
+<section class="sec" style="background:var(--white)"><div class="wrap">
+  <div class="sec-head fu"><span class="label">BOARD</span><h2 class="h2">공지사항 · 안전 소식</h2></div>
+  <div class="board-mini-grid">
+    <div class="fu">
+      <div class="b-head"><h3 class="b-tit2">공지사항</h3><a href="board.html" class="more-link">더보기 +</a></div>
+      <ul class="b-list">
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat red">공지</span><span class="b-item-tit">2025년 하반기 안전교육 일정 공지</span><span class="b-date">2025.06.01</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">안내</span><span class="b-item-tit">중대재해처벌법 개정 사항 안내</span><span class="b-date">2025.05.20</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">공지</span><span class="b-item-tit">위험성평가 인정 제도 변경 사항</span><span class="b-date">2025.04.15</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">안내</span><span class="b-item-tit">홈페이지 리뉴얼 오픈 안내</span><span class="b-date">2025.03.10</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">공지</span><span class="b-item-tit">2025년 안전관리 전문기관 재지정 완료</span><span class="b-date">2025.02.28</span></li>
+      </ul>
     </div>
-    <div>
-      <div class="contact-form">
-        <input type="text" placeholder="회사명 / 성함">
-        <input type="tel" placeholder="연락처">
-        <input type="email" placeholder="이메일">
-        <select style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:13px 16px;color:#7a9abf;font-size:0.9rem;outline:none;width:100%">
-          <option>문의 유형 선택</option>
-          <option>위험성평가</option>
-          <option>안전관리 대행</option>
-          <option>중대재해처벌법 대응</option>
-          <option>법정 안전교육</option>
-          <option>기타 문의</option>
-        </select>
-        <textarea placeholder="문의 내용을 입력해 주세요."></textarea>
-        <a href="#" class="btn-primary" style="text-align:center">문의 보내기</a>
-      </div>
+    <div class="fu fu-d2">
+      <div class="b-head"><h3 class="b-tit2">안전 법령 정보</h3><a href="board.html" class="more-link">더보기 +</a></div>
+      <ul class="b-list">
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat red">법령</span><span class="b-item-tit">산업안전보건법 시행규칙 개정 (2025)</span><span class="b-date">2025.05.30</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">뉴스</span><span class="b-item-tit">고용노동부 2025년 산재예방 중점 추진 과제</span><span class="b-date">2025.05.10</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat red">법령</span><span class="b-item-tit">화학물질관리법 개정 주요 내용</span><span class="b-date">2025.04.22</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat">뉴스</span><span class="b-item-tit">건설업 안전관리비 사용 기준 변경</span><span class="b-date">2025.04.05</span></li>
+        <li class="b-item" onclick="location.href='board.html'"><span class="b-cat red">법령</span><span class="b-item-tit">근로자 안전보건교육 시간 기준 변경</span><span class="b-date">2025.03.18</span></li>
+      </ul>
     </div>
   </div>
-</section>
+</div></section>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2024 <span>SafeGuard 안전컨설팅</span> | 사업자등록번호: 000-00-00000 | 대표: 홍길동 | 안전관리전문기관 지정</p>
-</footer>
+<section class="cta-sec"><div class="wrap"><div class="cta-inner">
+  <div><h2>지금 바로 전문가 상담을 받아보세요</h2><p>산업안전에 관한 모든 고민, (KS)안전기술이 해결해 드립니다</p></div>
+  <div class="cta-btns"><a href="inquiry.html" class="btn btn-red">무료 상담 신청 →</a><a href="directions.html" class="btn btn-ghost">오시는 길</a></div>
+</div></div></section>
 
+<div class="clients-sec">
+  <div class="clients-tit">주요 고객사 및 협력기관</div>
+  <div class="clients-track"><div class="clients-inner">
+    <span class="cl-logo">A 제조㈜</span><span class="cl-logo">B 건설㈜</span><span class="cl-logo">C 전기㈜</span><span class="cl-logo">D 물류㈜</span><span class="cl-logo">E 기계㈜</span><span class="cl-logo">F 의료재단</span><span class="cl-logo">G 식품㈜</span><span class="cl-logo">H 서비스㈜</span><span class="cl-logo">I 화학㈜</span><span class="cl-logo">J 철강㈜</span>
+    <span class="cl-logo">A 제조㈜</span><span class="cl-logo">B 건설㈜</span><span class="cl-logo">C 전기㈜</span><span class="cl-logo">D 물류㈜</span><span class="cl-logo">E 기계㈜</span><span class="cl-logo">F 의료재단</span><span class="cl-logo">G 식품㈜</span><span class="cl-logo">H 서비스㈜</span><span class="cl-logo">I 화학㈜</span><span class="cl-logo">J 철강㈜</span>
+  </div></div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="./assets/common.js"></script>
 <script>
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const t = document.querySelector(a.getAttribute('href'));
-      if (t) t.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
-  // Nav highlight
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => { if (scrollY >= s.offsetTop - 80) cur = s.id; });
-    links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + cur); });
-  });
+const slides=document.querySelectorAll('.h-slide'),dots=document.querySelectorAll('.h-dot');
+let cur=0,auto=setInterval(next,5000);
+function go(n){slides[cur].classList.remove('on');dots[cur].classList.remove('on');cur=n;slides[cur].classList.add('on');dots[cur].classList.add('on');}
+function next(){go((cur+1)%slides.length);}
+dots.forEach(d=>d.addEventListener('click',()=>{clearInterval(auto);go(parseInt(d.dataset.i));auto=setInterval(next,5000);}));
 </script>
 </body>
 </html>
