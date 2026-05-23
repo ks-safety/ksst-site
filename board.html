@@ -110,7 +110,7 @@
 <script src="./assets/common.js"></script>
 <script>
 /* ✏️ 게시글 데이터 — 실제 내용으로 수정하세요 */
-const POSTS = [
+let POSTS = [
   {id:15,cat:'notice',catLabel:'공지',date:'2025.06.01',views:128,title:'2025년 하반기 안전교육 일정 공지',body:'2025년 하반기 안전교육 일정을 안내드립니다.\n\n■ 교육 일정\n- 근로자 정기 교육: 매월 셋째 주 화요일\n- 관리감독자 교육: 분기별 일정 별도 안내\n- 특별 교육: 수시 진행\n\n자세한 문의는 전화(033-000-0000) 또는 온라인 문의를 이용해 주세요.'},
   {id:14,cat:'notice',catLabel:'안내',date:'2025.05.20',views:95,title:'중대재해처벌법 개정 사항 안내',body:'중대재해처벌법 시행 이후 주요 개정 사항을 안내드립니다.\n\n2024년 1월 27일부터 상시근로자 5인 미만 사업장에도 전면 적용됩니다. 해당 사업장에서는 즉시 안전보건관리체계를 점검하시기 바랍니다.\n\n전문 컨설팅이 필요하신 경우 문의해 주세요.'},
   {id:13,cat:'notice',catLabel:'공지',date:'2025.04.15',views:74,title:'위험성평가 인정 제도 변경 사항',body:'한국산업안전보건공단의 위험성평가 인정 제도 변경 사항을 공지합니다.\n\n주요 변경 내용:\n- 위험성평가 방법 다양화 (체크리스트형, OPS, KRAS 등)\n- 위험성 결정 기준 완화\n- 근로자 참여 확대 의무화\n\n자세한 내용은 문의해 주세요.'},
@@ -133,6 +133,17 @@ let currentPage = 1;
 const PER_PAGE = 10;
 
 function renderBoard() {
+  // 사이드바 카운트 자동 갱신
+  const cnt = { all: POSTS.length, notice:0, law:0, news:0 };
+  POSTS.forEach(p => { if (cnt[p.cat] !== undefined) cnt[p.cat]++; });
+  const sideItems = document.querySelectorAll('.bs-item .bs-cnt');
+  if (sideItems.length === 4) {
+    sideItems[0].textContent = cnt.all;
+    sideItems[1].textContent = cnt.notice;
+    sideItems[2].textContent = cnt.law;
+    sideItems[3].textContent = cnt.news;
+  }
+
   const keyword = document.getElementById('searchInput').value.toLowerCase();
   let filtered = POSTS.filter(p =>
     (currentCat === 'all' || p.cat === currentCat) &&
@@ -190,8 +201,90 @@ function closePost(e) {
   }
 }
 
+// ════════════════════════════════════════════════
+//  CMS 글 자동 불러오기 (_posts 폴더 → 16번부터 추가)
+// ════════════════════════════════════════════════
+// ✏️ GitHub 정보 (본인 저장소에 맞게 확인)
+const GH_USER = 'ks-safety';
+const GH_REPO = 'ksst-site';
+const GH_BRANCH = 'main';
+
+// 분류 한글 → 내부 카테고리 코드 변환
+function catToCode(cat) {
+  const m = { '공지':'notice', '안내':'notice', '법령':'law', '뉴스':'news' };
+  return m[cat] || 'notice';
+}
+
+// 파일 본문(마크다운)에서 frontmatter와 내용 분리
+function parsePost(raw) {
+  // ---로 감싼 부분이 frontmatter
+  const match = raw.match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/);
+  if (!match) return null;
+  const front = match[1];
+  const body  = match[2].trim();
+  const data = {};
+  front.split('\n').forEach(line => {
+    const idx = line.indexOf(':');
+    if (idx === -1) return;
+    const key = line.slice(0, idx).trim();
+    let val = line.slice(idx + 1).trim();
+    // 따옴표 제거
+    val = val.replace(/^["']|["']$/g, '');
+    data[key] = val;
+  });
+  data.body = body;
+  return data;
+}
+
+// 날짜 포맷: 2026-05-23 11:20:57 UTC → 2026.05.23
+function fmtDate(str) {
+  if (!str) return '';
+  const m = str.match(/(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[1]}.${m[2]}.${m[3]}` : str;
+}
+
+async function loadCmsPosts() {
+  try {
+    // 1. _posts 폴더의 파일 목록 가져오기
+    const listUrl = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/_posts?ref=${GH_BRANCH}`;
+    const res = await fetch(listUrl);
+    if (!res.ok) return; // 폴더 없거나 글 없으면 조용히 종료
+    const files = await res.json();
+    if (!Array.isArray(files)) return;
+
+    // 2. .md 파일만 골라 내용 읽기
+    const mdFiles = files.filter(f => f.name.endsWith('.md'));
+    let nextId = 16; // 기존 글이 15번까지이므로 16부터
+
+    const cmsPosts = [];
+    for (const file of mdFiles) {
+      const rawRes = await fetch(file.download_url);
+      const raw = await rawRes.text();
+      const data = parsePost(raw);
+      if (!data || !data.title) continue;
+      const code = catToCode(data.category);
+      cmsPosts.push({
+        id: nextId++,
+        cat: code,
+        catLabel: data.category || '공지',
+        date: fmtDate(data.date),
+        views: 0,
+        title: data.title,
+        body: data.body || ''
+      });
+    }
+
+    // 3. 최신 글이 위로 오도록 정렬 (날짜 내림차순), 기존 글 앞에 추가
+    cmsPosts.sort((a, b) => b.date.localeCompare(a.date));
+    POSTS = [...cmsPosts, ...POSTS];
+  } catch (err) {
+    console.log('CMS 글 로딩 건너뜀:', err);
+  }
+}
+
 // URL 파라미터로 카테고리 선택
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadCmsPosts(); // 먼저 CMS 글을 불러온 뒤
   const params = new URLSearchParams(window.location.search);
   const cat = params.get('cat');
   if (cat) {
