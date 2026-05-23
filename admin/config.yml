@@ -1,16 +1,15 @@
 backend:
   name: git-gateway
   branch: main
-
 media_folder: "assets/uploads"
-
 collections:
   - name: "board"
     label: "공지사항"
     folder: "_posts"
     create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "제목", name: "title", widget: "string" }
       - { label: "날짜", name: "date", widget: "datetime" }
       - { label: "분류", name: "category", widget: "select", options: ["공지", "안내", "법령", "뉴스"] }
-      - { label: "내용", name: "body", widget: "markdown" }
+      - { label: "내용", name: "body", widget: "text" }
