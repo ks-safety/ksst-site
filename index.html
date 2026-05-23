@@ -266,5 +266,6 @@ function go(n){slides[cur].classList.remove('on');dots[cur].classList.remove('on
 function next(){go((cur+1)%slides.length);}
 dots.forEach(d=>d.addEventListener('click',()=>{clearInterval(auto);go(parseInt(d.dataset.i));auto=setInterval(next,5000);}));
 </script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </body>
 </html>
