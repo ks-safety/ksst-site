@@ -6,7 +6,7 @@
 /* ════════════════════════════════════════════════════════
    ✏️ 사이트 정보 설정 — 여기만 수정하세요
    ════════════════════════════════════════════════════════ */
-const SITE = {
+let SITE = {
   name:     '(KS)안전기술',
   nameEn:   'Korea Standard Safety Tech.',
   biz:      '000-00-00000',       // 사업자등록번호
@@ -285,9 +285,32 @@ function submitInquiry(formId) {
 }
 
 /* ════════════════════════════════════════════════════════
+   site.json 불러오기 — CMS에서 편집한 회사 정보를 반영
+   파일이 없으면 위의 기본값으로 작동 (안전)
+   ════════════════════════════════════════════════════════ */
+async function loadSiteInfo() {
+  try {
+    // 루트/서브폴더 모두 대응
+    const path = isRoot() ? './site.json' : '../site.json';
+    const res = await fetch(path + '?t=' + Date.now()); // 캐시 방지
+    if (!res.ok) return;
+    const data = await res.json();
+    // 값이 있는 항목만 덮어쓰기 (빈 값은 기본값 유지)
+    Object.keys(data).forEach(key => {
+      if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+        SITE[key] = data[key];
+      }
+    });
+  } catch (err) {
+    console.log('site.json 불러오기 건너뜀:', err);
+  }
+}
+
+/* ════════════════════════════════════════════════════════
    초기화 실행
    ════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadSiteInfo();  // 먼저 회사 정보를 불러온 뒤
   buildNav();
   buildFooter();
   initScroll();
